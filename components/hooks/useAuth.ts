@@ -31,7 +31,7 @@ export const useAuth = () => {
         dispatch({ type: 'AUTHENTICATION_PENDING' })
 
         // user register post request
-        const response = await customFetch.post('api/v1/auth/register', {
+        const response = await customFetch.post('/api/v1/auth/register', {
           name,
           email,
           password,
@@ -154,7 +154,7 @@ export const useAuth = () => {
       // await pause(2000)
 
       try {
-        const response = await customFetch.get('api/v1/auth/logout')
+        const response = await customFetch.get('/api/v1/auth/logout')
         dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: null })
         const { msg } = response.data
         toast.success(msg)
@@ -169,7 +169,7 @@ export const useAuth = () => {
     dispatch({ type: 'SET_IS_LOADING' })
 
     customFetch
-      .post('api/v1/user/update-user-admin', values)
+      .post('/api/v1/user/update-user-admin', values)
       .then((response) => {
         // dispatch set admin user with response.data.user?
         toast.success(response.data.msg)
@@ -188,7 +188,7 @@ export const useAuth = () => {
 
   const deleteUserAccount = (userId: string) => {
     customFetch
-      .delete('api/v1/user/delete-user', {
+      .delete('/api/v1/user/delete-user', {
         data: { _id: userId },
       })
       .then((response) => {
@@ -223,7 +223,7 @@ export const useAuth = () => {
 
     try {
       const response = await customFetch.patch(
-        'api/v1/user/update-user-password',
+        '/api/v1/user/update-user-password',
         passwordValues
       )
 
@@ -237,7 +237,7 @@ export const useAuth = () => {
       dispatch({ type: 'CLEAR_IS_LOADING' })
     }
     // customFetch
-    //   .patch('api/v1/user/update-user-password', passwordValues)
+    //   .patch('/api/v1/user/update-user-password', passwordValues)
     //   .then((response) => {
     //     toast.success(response.data.msg)
     //     dispatch({ type: 'CLEAR_IS_LOADING' })
