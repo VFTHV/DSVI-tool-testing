@@ -58,7 +58,7 @@ export const useAuth = () => {
         dispatch({ type: 'AUTHENTICATION_PENDING' })
 
         // user login post request
-        const response = await customFetch.post('api/v1/auth/login', {
+        const response = await customFetch.post('/api/v1/auth/login', {
           email,
           password,
         })
@@ -82,7 +82,7 @@ export const useAuth = () => {
 
   const checkAuth = () => {
     const request = customFetch
-      .get('api/v1/auth/routing')
+      .get('/api/v1/auth/routing')
       .then((response) => {
         dispatch({
           type: 'AUTHENTICATE_USER_FULFILLED',
