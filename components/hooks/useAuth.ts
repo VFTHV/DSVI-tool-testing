@@ -81,7 +81,6 @@ export const useAuth = () => {
   }
 
   const checkAuth = () => {
-    console.log('cookie: ', document.cookie)
     const request = customFetch
       .get('api/v1/auth/routing')
       .then((response) => {
