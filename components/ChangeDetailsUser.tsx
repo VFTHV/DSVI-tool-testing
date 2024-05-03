@@ -30,8 +30,14 @@ export default function ChangeDetailsUser() {
 
     dispatch({ type: 'SET_IS_LOADING' })
 
+    const token = localStorage.getItem('token')
+    const requestConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
     customFetch
-      .patch('api/v1/user/update-user', { name, email })
+      .patch('api/v1/user/update-user', { name, email }, requestConfig)
       .then((response) => {
         toast.success(response.data.msg)
         dispatch({ type: 'SET_USER', payload: response.data.user })

@@ -245,9 +245,16 @@ export const useAuth = () => {
     dispatch({ type: 'SET_IS_LOADING' })
 
     try {
+      const token = localStorage.getItem('token')
+      const requestConfig = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
       const response = await customFetch.patch(
         '/api/v1/user/update-user-password',
-        passwordValues
+        passwordValues,
+        requestConfig
       )
 
       toast.success(response.data.msg)
