@@ -74,7 +74,7 @@ export const useWMSTile = () => {
   //       .then(
   //         (data) => {
   //           // const err = data.features.length > 0 ? null : data
-  //           console.log('in then')
+
   //           showGetFeatureInfo(evt.latlng, data, legends)
   //         },
   //         (error) => {

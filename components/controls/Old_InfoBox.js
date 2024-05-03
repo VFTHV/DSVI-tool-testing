@@ -85,11 +85,9 @@ const ControlMenu = (props) => {
       activeLegends[activeLegends.length - 1].title
     )
 
-    // console.log("indexOf >>", idOfLayer);
     if (idOfLayer > 0) {
       setDropdownValue(activeLegends[activeLegends.length - 1].title)
       setDropdownDescIndex(idOfLayer)
-      // console.log("dropdownValue >>", dropdownValue);
     }
   }
 
@@ -139,7 +137,6 @@ const ControlMenu = (props) => {
               stroke="currentColor"
               strokeWidth="2"
               onClick={(e) => {
-                // console.log(show_infoBox_data);
                 e.stopPropagation()
                 e.preventDefault()
                 if (show_infoBox_data === false) {
@@ -151,7 +148,6 @@ const ControlMenu = (props) => {
                     document.getElementsByClassName('info-box')
                   ).forEach((e) => (e.style.display = 'none'))
                 }
-                // console.log('dispatching');
 
                 dispatch({ type: 'TOGGLE_INFOBOX_DATA', payload: {} })
               }}
@@ -192,7 +188,6 @@ const ControlMenu = (props) => {
             <button
               className="button-infoBox"
               onClick={(e) => {
-                // console.log(show_infoBox_data);
                 e.stopPropagation()
                 e.preventDefault()
 

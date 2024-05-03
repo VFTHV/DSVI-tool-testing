@@ -22,7 +22,6 @@ export default function ChangePasswordUser() {
 
   const onPasswordChangeSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('submitting')
 
     changePasswordUser(passwordValues)
   }

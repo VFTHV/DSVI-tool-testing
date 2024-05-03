@@ -1,10 +1,9 @@
 // import token .env"
 
-var mtoken = process.env.mapboxapikey;
-// console.log(mtoken)
+var mtoken = process.env.mapboxapikey
 
 // export const TileProviders = [
-     
+
 //       {
 //         name: 'Esri',
 //         checked: true,
@@ -38,7 +37,7 @@ var mtoken = process.env.mapboxapikey;
 //     },
 //     // {
 //     //   name: 'Mapbox',
-      
+
 //     //   args: {
 //     //     url:
 //     //       'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/512/{z}/{x}/{y}?access_token={mtoken}',
@@ -79,11 +78,11 @@ var mtoken = process.env.mapboxapikey;
 // 				  // time: '',
 // 				  // tilematrixset: 'GoogleMapsCompatible_Level'
 //           },
-//       }       
+//       }
 //   ]
-  
-  // export const Settings = {
-  //   latlong: [38.917275, 71.014469],
-  //   zoom: 7,
-  //   wheelPxPerZoomLevel: 1
-  // }
+
+// export const Settings = {
+//   latlong: [38.917275, 71.014469],
+//   zoom: 7,
+//   wheelPxPerZoomLevel: 1
+// }

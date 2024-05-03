@@ -214,7 +214,7 @@ export default SocioeconLayers
             className="form-range h-6 p-0
                   focus:shadow-none focus:outline-none focus:ring-0"
             onChange={(event) => {
-              console.log(event.target.value)
+              
               const newItem = {
                 id: val2.id,
                 slug: val2.slug,
