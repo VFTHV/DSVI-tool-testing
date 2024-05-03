@@ -15,7 +15,18 @@ export default function Admin() {
   const getAllUsers = async () => {
     try {
       setIsLoading(true)
-      const response = await customFetch.get('api/v1/user/get-all-users')
+
+      const token = localStorage.getItem('token')
+      const requestConfig = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const response = await customFetch.get(
+        'api/v1/user/get-all-users',
+        requestConfig
+      )
 
       setUsers(response.data.users)
       setIsLoading(false)

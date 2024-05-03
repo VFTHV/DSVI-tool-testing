@@ -31,13 +31,25 @@ export const useAuth = () => {
         dispatch({ type: 'AUTHENTICATION_PENDING' })
 
         // user register post request
-        const response = await customFetch.post('/api/v1/auth/register', {
-          name,
-          email,
-          password,
-          countries,
-          role,
-        })
+
+        const token = localStorage.getItem('token')
+        const requestConfig = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+
+        const response = await customFetch.post(
+          '/api/v1/auth/register',
+          {
+            name,
+            email,
+            password,
+            countries,
+            role,
+          },
+          requestConfig
+        )
 
         dispatch({ type: 'REGISTER_USER_FULFILLED' })
         toast.success(
@@ -151,22 +163,16 @@ export const useAuth = () => {
     const asyncLogout = async () => {
       dispatch({ type: 'AUTHENTICATION_PENDING' })
 
-      // for DEV only
-      // const pause = (duration) => {
-      //   return new Promise((resolve) => {
-      //     setTimeout(resolve, duration)
-      //   })
-      // }
-      // await pause(2000)
+      localStorage.removeItem('token')
 
-      try {
-        const response = await customFetch.get('/api/v1/auth/logout')
-        dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: null })
-        const { msg } = response.data
-        toast.success(msg)
-      } catch (error) {
-        toast.error(error.message)
-      }
+      // try {
+      //   const response = await customFetch.get('/api/v1/auth/logout')
+      //   dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: null })
+      //   const { msg } = response.data
+      //   toast.success(msg)
+      // } catch (error) {
+      //   toast.error(error.message)
+      // }
     }
     asyncLogout()
   }
@@ -174,8 +180,15 @@ export const useAuth = () => {
   const changeUserDetailsAdmin = (values: UserAdminDetails) => {
     dispatch({ type: 'SET_IS_LOADING' })
 
+    const token = localStorage.getItem('token')
+    const requestConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
     customFetch
-      .post('/api/v1/user/update-user-admin', values)
+      .post('/api/v1/user/update-user-admin', values, requestConfig)
       .then((response) => {
         // dispatch set admin user with response.data.user?
         toast.success(response.data.msg)
@@ -193,10 +206,14 @@ export const useAuth = () => {
   }
 
   const deleteUserAccount = (userId: string) => {
+    const token = localStorage.getItem('token')
+    const requestConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
     customFetch
-      .delete('/api/v1/user/delete-user', {
-        data: { _id: userId },
-      })
+      .delete(`/api/v1/user/delete-user?id=${userId}`, requestConfig)
       .then((response) => {
         toast.success('User Deleted Successfully')
         router.push('/admin')
