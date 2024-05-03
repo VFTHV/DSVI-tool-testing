@@ -42,9 +42,9 @@ Plans:
     * add confirm email functionality: admin confirms the email. But user gets email notification
         - install nodemailer and create sendEmail controller - DONE
         - refactor login and register controllers as 11-auth-workflow - DONE
-    * add forgot password functionality
-    * figure out why there are 2 requests sent when routing
+    * figure out why there are 2 requests sent when routing - DONE
     * make backend be case insensitive to email
+    * add forgot password functionality
     * create different password rules: at least 8 chars, include one number, one lower, one upper
     case, one special character, no spaces in password
     * password not to be same as 5 previous passwords
