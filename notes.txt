@@ -43,9 +43,16 @@ Plans:
         - install nodemailer and create sendEmail controller - DONE
         - refactor login and register controllers as 11-auth-workflow - DONE
     * add forgot password functionality
+    * figure out why there are 2 requests sent when routing
+    * make backend be case insensitive to email
+    * create different password rules: at least 8 chars, include one number, one lower, one upper
+    case, one special character, no spaces in password
+    * password not to be same as 5 previous passwords
     that their account is waiting for admin's confirmation
     * add re-send verification email functionality 
     * add checkForUnauthorizedResponse in axios localStorage logic
+    * add encryption of stored data
+    * add decryption (non automatic) of stored data
     * user model to contain array of authorized countries
     * add authenticateUser middleware on backend. Functionality:
         check if user's countries authorization array contains(country) --> next()

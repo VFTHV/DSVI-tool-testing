@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import {
   AuthContext,
@@ -81,9 +81,10 @@ export const useAuth = () => {
         dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: user })
         toast.success(`Welcome back ${user.name}`)
       } catch (error) {
-        const errMsg = error.response.data
-          ? error.response.data.msg
-          : error.message
+        const errMsg =
+          error.response?.data?.msg ||
+          error?.message ||
+          'Error. Try again later!'
 
         localStorage.removeItem('token')
         toast.error(errMsg)

@@ -5,7 +5,7 @@ const customFetch = axios.create({
   // baseURL: 'http://localhost:3000/',
   // this option allows to receive cookies for this nextJS app
   // withCredentials: true,
-  timeout: 1000 * 10,
+  timeout: 1000 * 5,
   timeoutErrorMessage: 'Server may take 1 min to start. Please try again!',
 })
 
