@@ -7,7 +7,7 @@ import {
   ScaleControl,
   Pane,
 } from 'react-leaflet'
-import styles from './Map.module.scss'
+import styles from './Map.module.css'
 import { FilterContext } from '../../context/FilterContext'
 import CircleMarkers from '../marker/CircleMarkers'
 import CircleMarkersVulnerability from '../marker/CircleMarkersVulnerability'
