@@ -63,8 +63,8 @@ export const useAuth = () => {
           password,
         })
 
-        const { user } = response.data
-        console.log('loginUser, user: ', user)
+        const { user, token } = response.data
+        localStorage.setItem('token', token)
 
         dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: user })
         toast.success(`Welcome back ${user.name}`)
@@ -73,6 +73,7 @@ export const useAuth = () => {
           ? error.response.data.msg
           : error.message
 
+        localStorage.removeItem('token')
         toast.error(errMsg)
         dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: error })
       }
@@ -81,8 +82,13 @@ export const useAuth = () => {
   }
 
   const checkAuth = () => {
+    const token = localStorage.getItem('token')
     const request = customFetch
-      .get('/api/v1/auth/routing')
+      .get('/api/v1/auth/routing', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         dispatch({
           type: 'AUTHENTICATE_USER_FULFILLED',
@@ -91,7 +97,7 @@ export const useAuth = () => {
         return { user: response.data.user }
       })
       .catch((error) => {
-        const errMsg = error.response.data
+        const errMsg = error.response?.data
           ? error.response.data.msg
           : error.message
 
