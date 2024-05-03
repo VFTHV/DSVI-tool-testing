@@ -29,7 +29,8 @@ export default function EditUser() {
     const value = e.target.value
     setValues({ ...values, [name]: value })
   }
-
+  console.log(values.name)
+  console.log(values.email)
   const onCountrySelect = (e: ChangeEvent<HTMLInputElement>) => {
     const value: SelectedCountryType = e.target.value as SelectedCountryType
     if (values.countries.includes(value)) {
@@ -121,7 +122,7 @@ export default function EditUser() {
           onChange={onChange}
           id="email"
           shadow
-          style={onChangeFontStyle(values.name, userAdminDetails.name)}
+          style={onChangeFontStyle(values.email, userAdminDetails.email)}
         />
       </div>
 
@@ -159,7 +160,13 @@ export default function EditUser() {
             )}
           />
         </div>
-        <Select id="roles" name="role" onChange={onVerificationChange} required>
+        <Select
+          id="roles"
+          name="role"
+          onChange={onVerificationChange}
+          value={values.isVerified ? 'yes' : 'no'}
+          required
+        >
           <option value="yes">Yes</option>
           <option value="no">No</option>
         </Select>

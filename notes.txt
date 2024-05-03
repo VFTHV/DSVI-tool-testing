@@ -43,7 +43,10 @@ Plans:
         - install nodemailer and create sendEmail controller - DONE
         - refactor login and register controllers as 11-auth-workflow - DONE
     * figure out why there are 2 requests sent when routing - DONE
-    * make backend be case insensitive to email
+    * make backend be case insensitive to email - DONE
+    * when making changes to user from admin page, current displayed user settings do not match
+    the ones in database
+    * when changing name in admin edit user then email becomes red too
     * add forgot password functionality
     * create different password rules: at least 8 chars, include one number, one lower, one upper
     case, one special character, no spaces in password
