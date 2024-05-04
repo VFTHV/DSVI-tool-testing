@@ -40,13 +40,20 @@ export default function Admin() {
     }
   }
 
-  const getSingleUser = async () => {
+  const onSearchUsers = async () => {
+    const token = localStorage.getItem('token')
+    const requestConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
     try {
       setIsLoading(true)
       const response = await customFetch.get('api/v1/user', {
         params: {
           email: searchTerm,
         },
+        ...requestConfig,
       })
       // DEV only
       // const pause = (delay) => {
@@ -56,13 +63,12 @@ export default function Admin() {
       // }
       // await pause(2000)
 
-      setUsers([response.data.user])
+      setUsers(response.data.users)
       setSearchTerm('')
       setIsLoading(false)
     } catch (error) {
-      const errMsg = error.response.data
-        ? error.response.data.msg
-        : error.message
+      const errMsg =
+        error.response?.data?.msg || error.message || 'Error. Try again later'
 
       toast.error(errMsg)
       setIsLoading(false)
@@ -98,7 +104,7 @@ export default function Admin() {
       </Button>
       <div className="flex items-center">
         <Label className="m-2 " htmlFor="find">
-          Find One User by Email
+          Find Users by Email
         </Label>
 
         <TextInput
@@ -109,7 +115,7 @@ export default function Admin() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <Button
-          onClick={getSingleUser}
+          onClick={onSearchUsers}
           className="m-2"
           color="blue"
           disabled={isLoading}

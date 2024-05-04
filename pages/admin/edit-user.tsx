@@ -21,7 +21,7 @@ export default function EditUser() {
   const { changeUserDetailsAdmin, deleteUserAccount } = useAuth()
 
   if (!userAdminDetails) return <>No data to display</>
-  if (state.user.role !== 'admin') return <>Not admin</>
+  if (state.user?.role !== 'admin') return <>Not admin</>
 
   const [values, setValues] = useState<UserAdminDetails>(userAdminDetails)
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
