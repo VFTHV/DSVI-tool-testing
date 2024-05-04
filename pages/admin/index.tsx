@@ -12,7 +12,7 @@ export default function Admin() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [searchTerm, setSearchTerm] = useState<string>('')
 
-  const getAllUsers = async () => {
+  const getUsers = async (searchWord: string | null) => {
     try {
       setIsLoading(true)
 
@@ -22,53 +22,20 @@ export default function Admin() {
           Authorization: `Bearer ${token}`,
         },
       }
-
-      const response = await customFetch.get(
-        'api/v1/user/get-all-users',
-        requestConfig
-      )
-
-      setUsers(response.data.users)
-      setIsLoading(false)
-    } catch (error) {
-      const errMsg = error.response.data
-        ? error.response.data.msg
-        : error.message
-
-      toast.error(errMsg)
-      setIsLoading(false)
-    }
-  }
-
-  const onSearchUsers = async () => {
-    const token = localStorage.getItem('token')
-    const requestConfig = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-    try {
-      setIsLoading(true)
-      const response = await customFetch.get('api/v1/user', {
+      searchWord = searchWord ? searchWord : ''
+      console.log(searchWord)
+      const response = await customFetch.get('api/v1/user/get-all-users', {
         params: {
-          email: searchTerm,
+          email: searchWord ? searchWord : null,
         },
         ...requestConfig,
       })
-      // DEV only
-      // const pause = (delay) => {
-      //   return new Promise((res) => {
-      //     setTimeout(res, delay)
-      //   })
-      // }
-      // await pause(2000)
 
       setUsers(response.data.users)
-      setSearchTerm('')
       setIsLoading(false)
     } catch (error) {
       const errMsg =
-        error.response?.data?.msg || error.message || 'Error. Try again later'
+        error.response?.data?.msg || error.message || 'Error. Try again later!'
 
       toast.error(errMsg)
       setIsLoading(false)
@@ -88,7 +55,7 @@ export default function Admin() {
       <Button
         className="m-2"
         color="blue"
-        onClick={getAllUsers}
+        onClick={() => getUsers(null)}
         disabled={isLoading}
       >
         {isLoading ? 'loading...' : 'Get All Users'}
@@ -115,7 +82,7 @@ export default function Admin() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <Button
-          onClick={onSearchUsers}
+          onClick={() => getUsers(searchTerm)}
           className="m-2"
           color="blue"
           disabled={isLoading}
