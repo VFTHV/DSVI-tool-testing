@@ -29,8 +29,7 @@ export default function EditUser() {
     const value = e.target.value
     setValues({ ...values, [name]: value })
   }
-  console.log(values.name)
-  console.log(values.email)
+
   const onCountrySelect = (e: ChangeEvent<HTMLInputElement>) => {
     const value: SelectedCountryType = e.target.value as SelectedCountryType
     if (values.countries.includes(value)) {

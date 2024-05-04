@@ -5,6 +5,7 @@ import { AuthContext, UserAdminDetails } from '../../context/AuthContext'
 import customFetch from '../../utils/axios'
 import { toast } from 'react-toastify'
 import UserList from '../../components/UserList'
+import { getAuthHeaderConfig } from '../../utils/getAuthHeader'
 
 export default function Admin() {
   const { state } = useContext(AuthContext)
@@ -16,19 +17,12 @@ export default function Admin() {
     try {
       setIsLoading(true)
 
-      const token = localStorage.getItem('token')
-      const requestConfig = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
       searchWord = searchWord ? searchWord : ''
-      console.log(searchWord)
-      const response = await customFetch.get('api/v1/user/get-all-users', {
+      const response = await customFetch.get('api/v1/user/', {
         params: {
           email: searchWord ? searchWord : null,
         },
-        ...requestConfig,
+        ...getAuthHeaderConfig(),
       })
 
       setUsers(response.data.users)

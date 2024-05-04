@@ -3,6 +3,7 @@ import { Button, TextInput, Label } from 'flowbite-react'
 import { AuthContext } from '../context/AuthContext'
 import customFetch from '../utils/axios'
 import { toast } from 'react-toastify'
+import { getAuthHeaderConfig } from '../utils/getAuthHeader'
 
 export default function ChangeDetailsUser() {
   const { state, dispatch } = useContext(AuthContext)
@@ -30,14 +31,9 @@ export default function ChangeDetailsUser() {
 
     dispatch({ type: 'SET_IS_LOADING' })
 
-    const token = localStorage.getItem('token')
-    const requestConfig = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    getAuthHeaderConfig()
     customFetch
-      .patch('api/v1/user/update-user', { name, email }, requestConfig)
+      .patch('api/v1/user/update-user', { name, email }, getAuthHeaderConfig())
       .then((response) => {
         toast.success(response.data.msg)
         dispatch({ type: 'SET_USER', payload: response.data.user })

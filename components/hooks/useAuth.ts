@@ -8,6 +8,7 @@ import {
 import customFetch from '../../utils/axios'
 import { toast } from 'react-toastify'
 import { RoleType, SelectedCountryType } from '../../context/AuthContext'
+import { getAuthHeaderConfig } from '../../utils/getAuthHeader'
 
 export const useAuth = () => {
   const { state, dispatch } = useContext(AuthContext)
@@ -32,13 +33,6 @@ export const useAuth = () => {
 
         // user register post request
 
-        const token = localStorage.getItem('token')
-        const requestConfig = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-
         const response = await customFetch.post(
           '/api/v1/auth/register',
           {
@@ -48,7 +42,7 @@ export const useAuth = () => {
             countries,
             role,
           },
-          requestConfig
+          getAuthHeaderConfig()
         )
 
         dispatch({ type: 'REGISTER_USER_FULFILLED' })
@@ -95,13 +89,8 @@ export const useAuth = () => {
   }
 
   const checkAuth = () => {
-    const token = localStorage.getItem('token')
     const request = customFetch
-      .get('/api/v1/auth/routing', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get('/api/v1/auth/routing', getAuthHeaderConfig())
       .then((response) => {
         dispatch({
           type: 'AUTHENTICATE_USER_FULFILLED',
@@ -181,15 +170,8 @@ export const useAuth = () => {
   const changeUserDetailsAdmin = (values: UserAdminDetails) => {
     dispatch({ type: 'SET_IS_LOADING' })
 
-    const token = localStorage.getItem('token')
-    const requestConfig = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-
     customFetch
-      .post('/api/v1/user/update-user-admin', values, requestConfig)
+      .post('/api/v1/user/update-user-admin', values, getAuthHeaderConfig())
       .then((response) => {
         // dispatch set admin user with response.data.user?
         toast.success(response.data.msg)
@@ -207,14 +189,8 @@ export const useAuth = () => {
   }
 
   const deleteUserAccount = (userId: string) => {
-    const token = localStorage.getItem('token')
-    const requestConfig = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
     customFetch
-      .delete(`/api/v1/user/delete-user?id=${userId}`, requestConfig)
+      .delete(`/api/v1/user/delete-user?id=${userId}`, getAuthHeaderConfig())
       .then((response) => {
         toast.success('User Deleted Successfully')
         router.push('/admin')
@@ -246,16 +222,10 @@ export const useAuth = () => {
     dispatch({ type: 'SET_IS_LOADING' })
 
     try {
-      const token = localStorage.getItem('token')
-      const requestConfig = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
       const response = await customFetch.patch(
         '/api/v1/user/update-user-password',
         passwordValues,
-        requestConfig
+        getAuthHeaderConfig()
       )
 
       toast.success(response.data.msg)
