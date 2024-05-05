@@ -23,6 +23,7 @@ export const useAuth = () => {
   ) => {
     try {
       dispatch({ type: 'AUTHENTICATION_PENDING' })
+      checkPasswordStrength(password)
 
       const response = await customFetch.post(
         '/api/v1/auth/register',
@@ -42,7 +43,9 @@ export const useAuth = () => {
         { autoClose: false }
       )
     } catch (error) {
-      toast.error(error.response.data.msg)
+      const errMsg =
+        error.response?.data?.msg || error?.message || 'Unknown Error Occurred!'
+      toast.error(errMsg)
       dispatch({ type: 'REGISTER_USER_REJECTED', payload: error })
     }
   }
