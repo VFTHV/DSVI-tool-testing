@@ -86,7 +86,7 @@ export default function Register() {
 
   return (
     <>
-      <h1>Register</h1>
+      <h1 className="text-center text-lg font-bold">REGISTER NEW USER</h1>
       <form onSubmit={onSubmit} className="m-2 flex flex-col gap-4 sm:flex-row">
         <div className="flex flex-1 flex-col gap-4">
           <div>
