@@ -14,78 +14,61 @@ export const useAuth = () => {
   const { state, dispatch } = useContext(AuthContext)
   const router = useRouter()
 
-  const registerUser = (
+  const registerUser = async (
     name: string,
     email: string,
     password: string,
     countries: SelectedCountryType[],
     role: RoleType
   ) => {
-    const asyncRegister = async (
-      name: string,
-      email: string,
-      password: string,
-      countries: SelectedCountryType[],
-      role: RoleType
-    ) => {
-      try {
-        dispatch({ type: 'AUTHENTICATION_PENDING' })
+    try {
+      dispatch({ type: 'AUTHENTICATION_PENDING' })
 
-        // user register post request
-
-        const response = await customFetch.post(
-          '/api/v1/auth/register',
-          {
-            name,
-            email,
-            password,
-            countries,
-            role,
-          },
-          getAuthHeaderConfig()
-        )
-
-        dispatch({ type: 'REGISTER_USER_FULFILLED' })
-        toast.success(
-          `Account created. Verification email sent. Verify email, then login`,
-          { autoClose: false }
-        )
-      } catch (error) {
-        toast.error(error.response.data.msg)
-        dispatch({ type: 'REGISTER_USER_REJECTED', payload: error })
-      }
-    }
-    asyncRegister(name, email, password, countries, role)
-  }
-
-  const loginUser = (email: string, password: string) => {
-    const asyncLogin = async (email: string, password: string) => {
-      try {
-        dispatch({ type: 'AUTHENTICATION_PENDING' })
-
-        // user login post request
-        const response = await customFetch.post('/api/v1/auth/login', {
+      const response = await customFetch.post(
+        '/api/v1/auth/register',
+        {
+          name,
           email,
           password,
-        })
+          countries,
+          role,
+        },
+        getAuthHeaderConfig()
+      )
 
-        const { user, token } = response.data
-        localStorage.setItem('token', token)
-
-        dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: user })
-        toast.success(`Welcome back ${user.name}`)
-      } catch (error) {
-        const errMsg =
-          error.response?.data?.msg ||
-          error?.message ||
-          'Error. Try again later!'
-
-        localStorage.removeItem('token')
-        toast.error(errMsg)
-        dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: error })
-      }
+      dispatch({ type: 'REGISTER_USER_FULFILLED' })
+      toast.success(
+        `Account created. Verification email sent. Verify email, then login`,
+        { autoClose: false }
+      )
+    } catch (error) {
+      toast.error(error.response.data.msg)
+      dispatch({ type: 'REGISTER_USER_REJECTED', payload: error })
     }
-    asyncLogin(email, password)
+  }
+
+  const loginUser = async (email: string, password: string) => {
+    try {
+      dispatch({ type: 'AUTHENTICATION_PENDING' })
+
+      const response = await customFetch.post('/api/v1/auth/login', {
+        email,
+        password,
+      })
+
+      const { user, token } = response.data
+      localStorage.setItem('token', token)
+
+      dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: user })
+      toast.success(`Welcome back ${user.name}`)
+    } catch (error) {
+      const errMsg =
+        error.response?.data?.msg || error?.message || 'Unknown Error Occurred!'
+
+      localStorage.removeItem('token')
+      toast.error(errMsg)
+      dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: error })
+    }
   }
 
   const checkAuth = () => {
@@ -150,21 +133,8 @@ export const useAuth = () => {
   }
 
   const logoutUser = () => {
-    const asyncLogout = async () => {
-      dispatch({ type: 'AUTHENTICATION_PENDING' })
-
-      localStorage.removeItem('token')
-
-      // try {
-      //   const response = await customFetch.get('/api/v1/auth/logout')
-      //   dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: null })
-      //   const { msg } = response.data
-      //   toast.success(msg)
-      // } catch (error) {
-      //   toast.error(error.message)
-      // }
-    }
-    asyncLogout()
+    dispatch({ type: 'AUTHENTICATION_PENDING' })
+    localStorage.removeItem('token')
   }
 
   const changeUserDetailsAdmin = async (values: UserAdminDetails) => {
