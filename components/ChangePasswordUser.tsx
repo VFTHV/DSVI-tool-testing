@@ -2,6 +2,7 @@ import React, { ChangeEvent, FormEvent, useContext, useState } from 'react'
 import { Button, TextInput, Label } from 'flowbite-react'
 import { useAuth } from './hooks/useAuth'
 import { AuthContext } from '../context/AuthContext'
+import PasswordChecker from './PasswordChecker'
 
 const initialPasswordValues = {
   oldPassword: '',
@@ -70,6 +71,10 @@ export default function ChangePasswordUser() {
           shadow
         />
       </div>
+      <PasswordChecker
+        password={passwordValues.newPassword}
+        confirmPassword={passwordValues.confirmPassword}
+      />
       <Button type="submit" color="blue" disabled={state.isLoading}>
         {state.isLoading ? 'Loading...' : 'Change Password'}
       </Button>

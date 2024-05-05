@@ -11,6 +11,7 @@ import { toast } from 'react-toastify'
 import _ from 'lodash'
 import { useAuth } from '../../components/hooks/useAuth'
 import { Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
+import PasswordChecker from '../../components/PasswordChecker'
 
 export default function EditUser() {
   const {
@@ -147,6 +148,8 @@ export default function EditUser() {
           style={onChangeFontStyle(values.password, userAdminDetails.password)}
         />
       </div>
+
+      <PasswordChecker password={values.password} />
 
       <div className="max-w-md">
         <div className="mb-2 block">

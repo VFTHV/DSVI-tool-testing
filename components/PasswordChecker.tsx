@@ -2,7 +2,6 @@
 
 import React from 'react'
 import validator, { StrongPasswordOptions } from 'validator'
-import { Accordion } from 'flowbite-react'
 
 const passwordRequirements: Partial<
   StrongPasswordOptions & { returnScore: false }

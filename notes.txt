@@ -48,7 +48,13 @@ Plans:
     the ones in database - DONE
     * when changing name in admin edit user then email becomes red too - FIXED DONE
     * create different password rules: at least 8 chars, include one number, one lower, one upper case, one special character, no spaces in password - DONE FOR backend
-    * implement same password requirements for front end
+    * user model to contain array of authorized countries - DONE
+    * create PasswordChecker component that visually represents if password is correct - DONE
+    * implement backend password validation on front end as well
+    * add checkPermissions on the back end so that one user could not change password
+    of another user 
+    * on back end when updating password add comparison and validation that old password
+    cannot be the same as new
     * add forgot password functionality 
     * password not to be same as 5 previous passwords
     that their account is waiting for admin's confirmation
@@ -56,7 +62,6 @@ Plans:
     * add checkForUnauthorizedResponse in axios localStorage logic
     * add encryption of stored data
     * add decryption (non automatic) of stored data
-    * user model to contain array of authorized countries - DONE
     * add authenticateUser middleware on backend. Functionality:
         check if user's countries authorization array contains(country) --> next()
     * front end: create api functionality to request layers
