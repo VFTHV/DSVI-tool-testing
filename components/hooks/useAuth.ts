@@ -167,25 +167,28 @@ export const useAuth = () => {
     asyncLogout()
   }
 
-  const changeUserDetailsAdmin = (values: UserAdminDetails) => {
+  const changeUserDetailsAdmin = async (values: UserAdminDetails) => {
     dispatch({ type: 'SET_IS_LOADING' })
 
-    customFetch
-      .post('/api/v1/user/update-user-admin', values, getAuthHeaderConfig())
-      .then((response) => {
-        // dispatch set admin user with response.data.user?
-        toast.success(response.data.msg)
-        router.push('/admin')
-        dispatch({ type: 'CLEAR_USER_ADMIN_DETAILS', payload: values })
-        dispatch({ type: 'CLEAR_IS_LOADING' })
-      })
-      .catch((error) => {
-        const errMsg = error.response.data
-          ? error.response.data.msg
-          : error.message
-        toast.error(errMsg)
-        dispatch({ type: 'CLEAR_IS_LOADING' })
-      })
+    try {
+      checkPasswordStrength(values.password)
+      const response = await customFetch.post(
+        '/api/v1/user/update-user-admin',
+        values,
+        getAuthHeaderConfig()
+      )
+
+      toast.success(response.data.msg)
+      router.push('/admin')
+      dispatch({ type: 'CLEAR_USER_ADMIN_DETAILS', payload: values })
+      dispatch({ type: 'CLEAR_IS_LOADING' })
+    } catch (error) {
+      const errMsg =
+        error.response?.data?.msg || error.message || 'Unknown Error Occurred!'
+
+      toast.error(errMsg)
+      dispatch({ type: 'CLEAR_IS_LOADING' })
+    }
   }
 
   const deleteUserAccount = (userId: string) => {

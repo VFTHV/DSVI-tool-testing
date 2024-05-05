@@ -11,6 +11,8 @@ export const getAuthHeaderConfig = () => {
 }
 
 export const checkPasswordStrength = (password: string) => {
+  if (!password) return
+
   const passwordRequirements: Partial<
     StrongPasswordOptions & { returnScore: false }
   > = {
