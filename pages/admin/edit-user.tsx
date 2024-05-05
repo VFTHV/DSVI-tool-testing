@@ -88,7 +88,7 @@ export default function EditUser() {
   return (
     <>
       <h1>Edit User</h1>
-      <form onSubmit={onSubmit} className="m-2 flex gap-4">
+      <form onSubmit={onSubmit} className="m-2 flex flex-col gap-4 sm:flex-row">
         <div className="flex flex-1 flex-col gap-4">
           <div>
             <div className="mb-2 block">
