@@ -40,22 +40,11 @@ export type AuthInitialStateType = {
 
 export type AuthProviderActionType =
   | {
-      type:
-        | 'REGISTER_USER_REJECTED'
-        | 'AUTHENTICATE_USER_FULFILLED'
-        | 'AUTHENTICATE_USER_REJECTED'
-        | 'SET_USER_ADMIN_DETAILS'
-        | 'CLEAR_USER_ADMIN_DETAILS'
-        | 'SET_USER'
+      type: 'SET_USER_ADMIN_DETAILS' | 'CLEAR_USER_ADMIN_DETAILS' | 'SET_USER'
       payload: any
     }
   | {
-      type:
-        | 'AUTHENTICATION_PENDING'
-        | 'REGISTER_USER_FULFILLED'
-        | 'SET_IS_LOADING'
-        | 'CLEAR_IS_LOADING'
-        | 'CLEAR_USER'
+      type: 'SET_IS_LOADING' | 'CLEAR_IS_LOADING' | 'CLEAR_USER'
     }
 
 type AuthContextType = {
@@ -78,34 +67,6 @@ export const AuthProvider = ({ children }) => {
     action: AuthProviderActionType
   ): AuthInitialStateType => {
     switch (action.type) {
-      // case 'AUTHENTICATION_PENDING':
-      //   return { ...state, isLoading: true }
-      // case 'REGISTER_USER_FULFILLED':
-      //   return {
-      //     ...state,
-      //     isLoading: false,
-      //     // user: null,
-      //   }
-      // case 'REGISTER_USER_REJECTED': {
-      //   return {
-      //     ...state,
-      //     isLoading: false,
-      //     error: action.payload,
-      //     // user: null,
-      //   }
-      // }
-
-      case 'AUTHENTICATE_USER_FULFILLED': {
-        return { ...state, isLoading: false, user: action.payload }
-      }
-      case 'AUTHENTICATE_USER_REJECTED': {
-        return {
-          ...state,
-          isLoading: false,
-          error: action.payload,
-          user: null,
-        }
-      }
       case 'SET_USER_ADMIN_DETAILS': {
         return { ...state, userAdminDetails: action.payload }
       }

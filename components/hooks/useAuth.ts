@@ -44,7 +44,7 @@ export const useAuth = () => {
 
   const loginUser = async (email: string, password: string) => {
     try {
-      dispatch({ type: 'AUTHENTICATION_PENDING' })
+      dispatch({ type: 'SET_IS_LOADING' })
 
       const response = await customFetch.post('/api/v1/auth/login', {
         email,
@@ -54,7 +54,8 @@ export const useAuth = () => {
       const { user, token } = response.data
       localStorage.setItem('token', token)
 
-      dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: user })
+      dispatch({ type: 'CLEAR_IS_LOADING' })
+      dispatch({ type: 'SET_USER', payload: user })
       toast.success(`Welcome back ${user.name}`)
     } catch (error) {
       const errMsg =
@@ -62,7 +63,8 @@ export const useAuth = () => {
 
       localStorage.removeItem('token')
       toast.error(errMsg)
-      dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: error })
+      dispatch({ type: 'CLEAR_IS_LOADING' })
+      dispatch({ type: 'CLEAR_USER' })
     }
   }
 
@@ -70,18 +72,16 @@ export const useAuth = () => {
     const request = customFetch
       .get('/api/v1/auth/routing', getAuthHeaderConfig())
       .then((response) => {
-        dispatch({
-          type: 'AUTHENTICATE_USER_FULFILLED',
-          payload: response.data.user,
-        })
+        dispatch({ type: 'CLEAR_IS_LOADING' })
+        dispatch({ type: 'SET_USER', payload: response.data.user })
         return { user: response.data.user }
       })
       .catch((error) => {
-        const errMsg = error.response?.data
-          ? error.response.data.msg
-          : error.message
+        const errMsg =
+          error.response?.data?.msg || error.message || 'Unkown Error Occurred!'
 
-        dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: errMsg })
+        dispatch({ type: 'CLEAR_IS_LOADING' })
+        dispatch({ type: 'CLEAR_USER' })
         return { error: errMsg }
       })
     return request
@@ -128,7 +128,7 @@ export const useAuth = () => {
   }
 
   const logoutUser = () => {
-    dispatch({ type: 'AUTHENTICATION_PENDING' })
+    dispatch({ type: 'CLEAR_USER' })
     localStorage.removeItem('token')
   }
 
