@@ -2,6 +2,7 @@
 
 import React from 'react'
 import validator, { StrongPasswordOptions } from 'validator'
+import { Accordion } from 'flowbite-react'
 
 const passwordRequirements: Partial<
   StrongPasswordOptions & { returnScore: false }
@@ -54,7 +55,7 @@ export default function PasswordChecker({ password, confirmPassword }: Props) {
   const isMatching = password ? password === confirmPassword : false
 
   return (
-    <div className="text-sm font-bold">
+    <div className={`${password ? 'block' : 'hidden'} text-sm font-bold`}>
       <p className={isValidLength ? 'text-green-600' : 'text-red-600'}>
         At least {passwordRequirements.minLength} characters
       </p>
