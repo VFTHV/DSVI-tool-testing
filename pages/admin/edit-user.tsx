@@ -86,153 +86,165 @@ export default function EditUser() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="m-2 flex max-w-md flex-col gap-4">
+    <>
       <h1>Edit User</h1>
-      <div>
-        <div className="mb-2 block">
-          <Label
-            value="Name:"
-            htmlFor="name"
-            style={onChangeFontStyle(values.name, userAdminDetails.name)}
-          />
+      <form onSubmit={onSubmit} className="m-2 flex gap-4">
+        <div className="flex flex-1 flex-col gap-4">
+          <div>
+            <div className="mb-2 block">
+              <Label
+                value="Name:"
+                htmlFor="name"
+                style={onChangeFontStyle(values.name, userAdminDetails.name)}
+              />
+            </div>
+            <TextInput
+              type="text"
+              id="name"
+              name="name"
+              value={values.name}
+              onChange={onChange}
+              shadow
+              style={onChangeFontStyle(values.name, userAdminDetails.name)}
+            />
+          </div>
+
+          <div>
+            <div className="mb-2 block">
+              <Label
+                value="Email:"
+                htmlFor="email"
+                style={onChangeFontStyle(values.email, userAdminDetails.email)}
+              />
+            </div>
+            <TextInput
+              type="text"
+              name="email"
+              value={values.email.trim()}
+              onChange={onChange}
+              id="email"
+              shadow
+              style={onChangeFontStyle(values.email, userAdminDetails.email)}
+            />
+          </div>
+
+          {/* password needs to conform to backend requirements */}
+          <div>
+            <div className="mb-2 block">
+              <Label
+                value="Password:"
+                htmlFor="password"
+                style={onChangeFontStyle(
+                  values.password,
+                  userAdminDetails.password
+                )}
+              />
+            </div>
+            <TextInput
+              type="text"
+              name="password"
+              value={values.password}
+              onChange={onChange}
+              id="password"
+              shadow
+              style={onChangeFontStyle(
+                values.password,
+                userAdminDetails.password
+              )}
+            />
+          </div>
+
+          <PasswordChecker password={values.password} />
+          <div>
+            <div className="mb-2 block">
+              <Label
+                htmlFor="roles"
+                value="Account Verified:"
+                style={onChangeFontStyle(
+                  values.isVerified,
+                  userAdminDetails.isVerified
+                )}
+              />
+            </div>
+            <Select
+              id="roles"
+              name="role"
+              onChange={onVerificationChange}
+              value={values.isVerified ? 'yes' : 'no'}
+              required
+            >
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </Select>
+          </div>
         </div>
-        <TextInput
-          type="text"
-          id="name"
-          name="name"
-          value={values.name}
-          onChange={onChange}
-          shadow
-          style={onChangeFontStyle(values.name, userAdminDetails.name)}
-        />
-      </div>
 
-      <div>
-        <div className="mb-2 block">
-          <Label
-            value="Email:"
-            htmlFor="email"
-            style={onChangeFontStyle(values.email, userAdminDetails.email)}
-          />
+        <div className="flex flex-1 flex-col gap-4">
+          <div>
+            <div className="mb-2 block">
+              <Label
+                htmlFor="roles"
+                value="User's Role:"
+                style={onChangeFontStyle(values.role, userAdminDetails.role)}
+              />
+            </div>
+            <Select
+              id="roles"
+              name="role"
+              onChange={onChange}
+              value={values.role}
+              required
+            >
+              {roleValues.map((role) => {
+                return (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                )
+              })}
+            </Select>
+          </div>
+
+          <div>
+            <h2
+              style={onChangeFontStyle(
+                values.countries.sort(),
+                userAdminDetails.countries.sort()
+              )}
+            >
+              Countries accessible to user
+            </h2>
+            <div className="flex max-w-md flex-col gap-2" id="checkbox">
+              {countryValues.map((country) => {
+                return (
+                  <div key={country} className="flex items-center gap-2">
+                    <Checkbox
+                      id={country}
+                      onChange={onCountrySelect}
+                      value={country}
+                      color="blue"
+                      checked={values.countries.includes(country)}
+                    />
+                    <Label htmlFor={country}>{country}</Label>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          <Button color="blue" type="submit" disabled={state.isLoading}>
+            {state.isLoading ? 'loading...' : 'Submit Changes'}
+          </Button>
+
+          <Button
+            color="failure"
+            disabled={state.isLoading}
+            onClick={onUserDelete}
+          >
+            {state.isLoading ? 'loading...' : 'Delete User'}
+          </Button>
         </div>
-        <TextInput
-          type="text"
-          name="email"
-          value={values.email.trim()}
-          onChange={onChange}
-          id="email"
-          shadow
-          style={onChangeFontStyle(values.email, userAdminDetails.email)}
-        />
-      </div>
-
-      {/* password needs to conform to backend requirements */}
-      <div>
-        <div className="mb-2 block">
-          <Label
-            value="Password:"
-            htmlFor="password"
-            style={onChangeFontStyle(
-              values.password,
-              userAdminDetails.password
-            )}
-          />
-        </div>
-        <TextInput
-          type="text"
-          name="password"
-          value={values.password}
-          onChange={onChange}
-          id="password"
-          shadow
-          style={onChangeFontStyle(values.password, userAdminDetails.password)}
-        />
-      </div>
-
-      <PasswordChecker password={values.password} />
-
-      <div className="max-w-md">
-        <div className="mb-2 block">
-          <Label
-            htmlFor="roles"
-            value="Account Verified:"
-            style={onChangeFontStyle(
-              values.isVerified,
-              userAdminDetails.isVerified
-            )}
-          />
-        </div>
-        <Select
-          id="roles"
-          name="role"
-          onChange={onVerificationChange}
-          value={values.isVerified ? 'yes' : 'no'}
-          required
-        >
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
-        </Select>
-      </div>
-
-      <div className="max-w-md">
-        <div className="mb-2 block">
-          <Label
-            htmlFor="roles"
-            value="User's Role:"
-            style={onChangeFontStyle(values.role, userAdminDetails.role)}
-          />
-        </div>
-        <Select
-          id="roles"
-          name="role"
-          onChange={onChange}
-          value={values.role}
-          required
-        >
-          {roleValues.map((role) => {
-            return (
-              <option key={role} value={role}>
-                {role}
-              </option>
-            )
-          })}
-        </Select>
-      </div>
-
-      <div>
-        <h2
-          style={onChangeFontStyle(
-            values.countries.sort(),
-            userAdminDetails.countries.sort()
-          )}
-        >
-          Countries accessible to user
-        </h2>
-        <div className="flex max-w-md flex-col gap-2" id="checkbox">
-          {countryValues.map((country) => {
-            return (
-              <div key={country} className="flex items-center gap-2">
-                <Checkbox
-                  id={country}
-                  onChange={onCountrySelect}
-                  value={country}
-                  color="blue"
-                  checked={values.countries.includes(country)}
-                />
-                <Label htmlFor={country}>{country}</Label>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
-      <Button color="blue" type="submit" disabled={state.isLoading}>
-        {state.isLoading ? 'loading...' : 'Submit Changes'}
-      </Button>
-
-      <Button color="failure" disabled={state.isLoading} onClick={onUserDelete}>
-        {state.isLoading ? 'loading...' : 'Delete User'}
-      </Button>
-    </form>
+      </form>
+    </>
   )
 }
