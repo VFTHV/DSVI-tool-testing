@@ -21,33 +21,25 @@ export const useAuth = () => {
     countries: SelectedCountryType[],
     role: RoleType
   ) => {
-    try {
-      dispatch({ type: 'AUTHENTICATION_PENDING' })
-      checkPasswordStrength(password)
+    dispatch({ type: 'SET_IS_LOADING' })
 
-      const response = await customFetch.post(
-        '/api/v1/auth/register',
-        {
-          name,
-          email,
-          password,
-          countries,
-          role,
-        },
-        getAuthHeaderConfig()
-      )
+    const response = await customFetch.post(
+      '/api/v1/auth/register',
+      {
+        name,
+        email,
+        password,
+        countries,
+        role,
+      },
+      getAuthHeaderConfig()
+    )
 
-      dispatch({ type: 'REGISTER_USER_FULFILLED' })
-      toast.success(
-        `Account created. Verification email sent. Verify email, then login`,
-        { autoClose: false }
-      )
-    } catch (error) {
-      const errMsg =
-        error.response?.data?.msg || error?.message || 'Unknown Error Occurred!'
-      toast.error(errMsg)
-      dispatch({ type: 'REGISTER_USER_REJECTED', payload: error })
-    }
+    dispatch({ type: 'CLEAR_IS_LOADING' })
+    toast.success(
+      `Account created. Verification email sent. Verify email, then login`,
+      { autoClose: false }
+    )
   }
 
   const loginUser = async (email: string, password: string) => {

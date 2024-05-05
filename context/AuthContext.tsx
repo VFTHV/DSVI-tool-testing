@@ -55,6 +55,7 @@ export type AuthProviderActionType =
         | 'REGISTER_USER_FULFILLED'
         | 'SET_IS_LOADING'
         | 'CLEAR_IS_LOADING'
+        | 'CLEAR_USER'
     }
 
 type AuthContextType = {
@@ -77,22 +78,23 @@ export const AuthProvider = ({ children }) => {
     action: AuthProviderActionType
   ): AuthInitialStateType => {
     switch (action.type) {
-      case 'AUTHENTICATION_PENDING':
-        return { ...state, isLoading: true }
-      case 'REGISTER_USER_FULFILLED':
-        return {
-          ...state,
-          isLoading: false,
-          // user: null,
-        }
-      case 'REGISTER_USER_REJECTED': {
-        return {
-          ...state,
-          isLoading: false,
-          error: action.payload,
-          // user: null,
-        }
-      }
+      // case 'AUTHENTICATION_PENDING':
+      //   return { ...state, isLoading: true }
+      // case 'REGISTER_USER_FULFILLED':
+      //   return {
+      //     ...state,
+      //     isLoading: false,
+      //     // user: null,
+      //   }
+      // case 'REGISTER_USER_REJECTED': {
+      //   return {
+      //     ...state,
+      //     isLoading: false,
+      //     error: action.payload,
+      //     // user: null,
+      //   }
+      // }
+
       case 'AUTHENTICATE_USER_FULFILLED': {
         return { ...state, isLoading: false, user: action.payload }
       }
@@ -119,6 +121,10 @@ export const AuthProvider = ({ children }) => {
       case 'SET_USER': {
         return { ...state, user: action.payload }
       }
+      case 'CLEAR_USER': {
+        return { ...state, user: null }
+      }
+
       default:
         return state
     }

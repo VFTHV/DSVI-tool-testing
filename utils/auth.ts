@@ -27,7 +27,7 @@ export const checkPasswordStrength = (password: string) => {
     password,
     passwordRequirements
   )
-  console.log('isPasswordStrong ', isPasswordStrong)
+
   if (!isPasswordStrong) {
     throw new Error('Password is not strong enough. Front end!')
   }

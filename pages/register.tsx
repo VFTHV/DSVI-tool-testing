@@ -16,6 +16,7 @@ import { toast } from 'react-toastify'
 import { useAuth } from '../components/hooks/useAuth'
 import { Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
 import PasswordChecker from '../components/PasswordChecker'
+import { checkPasswordStrength } from '../utils/auth'
 
 const initialState = {
   name: '',
@@ -26,7 +27,7 @@ const initialState = {
 }
 
 export default function Register() {
-  const { state } = useContext(AuthContext)
+  const { state, dispatch } = useContext(AuthContext)
   const { registerUser } = useAuth()
 
   const [values, setValues] = useState<typeof initialState>(initialState)
@@ -65,9 +66,18 @@ export default function Register() {
       toast.error('Passwords are not matching!!!')
       return
     }
-    registerUser(name, email, password, selectedCountries, role)
-    setValues(initialState)
-    setSelectedCountries([])
+
+    try {
+      checkPasswordStrength(password)
+      registerUser(name, email, password, selectedCountries, role)
+      setValues(initialState)
+      setSelectedCountries([])
+    } catch (error) {
+      const errMsg =
+        error.response?.data?.msg || error?.message || 'Unknown Error Occurred!'
+      toast.error(errMsg)
+      dispatch({ type: 'CLEAR_IS_LOADING' })
+    }
   }
 
   if (!state.user || (state.user && state.user.role !== 'admin')) {
