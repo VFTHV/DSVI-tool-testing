@@ -15,6 +15,7 @@ import {
 import { toast } from 'react-toastify'
 import { useAuth } from '../components/hooks/useAuth'
 import { Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
+import PasswordChecker from '../components/PasswordChecker'
 
 const initialState = {
   name: '',
@@ -130,6 +131,11 @@ export default function Register() {
           onChange={handleChange}
         />
       </div>
+
+      <PasswordChecker
+        password={values.password}
+        confirmPassword={values.confirmPassword}
+      />
 
       <div>
         <h2>Countries accessible to new user</h2>
