@@ -27,7 +27,7 @@ const About = () => {
         <p className="py-5 px-5 ">
           <a href="./volunteer" className="volunteer-link">
             <button className="rounded border border-blue-500 bg-transparent py-2 px-4 font-semibold text-blue-700 hover:border-transparent hover:bg-blue-500 hover:text-white">
-              United Nations Online Volunteers
+              United Nations Online Developers & Volunteers
             </button>
           </a>
         </p>

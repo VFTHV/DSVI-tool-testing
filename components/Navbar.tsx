@@ -46,18 +46,20 @@ const Navbar = () => {
           </span>
         </div>
       </Link>
-
+      {/* 
       <Link href="/volunteer">
         <div className="mr-5 flex px-2 font-bold hover:text-gray-900">
           <MdOutlineVolunteerActivism
             className={`h-6 w-6  ${returnIconClassname('volunteer')}`}
           />
-          {/* <DialogIcon pathname={pathname} /> */}
+          // <DialogIcon pathname={pathname} /> 
           <span className={pathname === 'volunteer' ? className : 'pl-1'}>
-            Volunteers
+            Developers & Volunteers
           </span>
         </div>
       </Link>
+    */}
+
       {state.user && state.user.role === 'admin' && (
         <Link href="/admin">
           <div className="mr-5 flex px-2 font-bold hover:text-gray-900">
