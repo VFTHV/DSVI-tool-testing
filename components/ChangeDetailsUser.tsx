@@ -3,7 +3,7 @@ import { Button, TextInput, Label } from 'flowbite-react'
 import { AuthContext } from '../context/AuthContext'
 import customFetch from '../utils/axios'
 import { toast } from 'react-toastify'
-import { getAuthHeaderConfig } from '../utils/getAuthHeader'
+import { getAuthHeaderConfig } from '../utils/auth'
 
 export default function ChangeDetailsUser() {
   const { state, dispatch } = useContext(AuthContext)

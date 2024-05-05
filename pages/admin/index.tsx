@@ -5,7 +5,7 @@ import { AuthContext, UserAdminDetails } from '../../context/AuthContext'
 import customFetch from '../../utils/axios'
 import { toast } from 'react-toastify'
 import UserList from '../../components/UserList'
-import { getAuthHeaderConfig } from '../../utils/getAuthHeader'
+import { getAuthHeaderConfig } from '../../utils/auth'
 
 export default function Admin() {
   const { state } = useContext(AuthContext)

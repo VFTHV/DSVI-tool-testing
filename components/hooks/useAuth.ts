@@ -8,7 +8,7 @@ import {
 import customFetch from '../../utils/axios'
 import { toast } from 'react-toastify'
 import { RoleType, SelectedCountryType } from '../../context/AuthContext'
-import { getAuthHeaderConfig } from '../../utils/getAuthHeader'
+import { checkPasswordStrength, getAuthHeaderConfig } from '../../utils/auth'
 
 export const useAuth = () => {
   const { state, dispatch } = useContext(AuthContext)
@@ -204,24 +204,20 @@ export const useAuth = () => {
   }
 
   const changePasswordUser = async (passwordValues: {
-    oldPassword: String
-    newPassword: String
-    confirmPassword: String
+    oldPassword: string
+    newPassword: string
+    confirmPassword: string
   }) => {
-    const { newPassword, confirmPassword, oldPassword } = passwordValues
-
-    if (newPassword !== confirmPassword) {
-      toast.error('New passwords are not matching')
-      return
-    }
-    if (oldPassword === newPassword) {
-      toast.error('Cannot use previous password')
-      return
-    }
+    const { newPassword, confirmPassword } = passwordValues
 
     dispatch({ type: 'SET_IS_LOADING' })
 
     try {
+      if (newPassword !== confirmPassword) {
+        throw new Error('New passwords are not matching')
+      }
+
+      checkPasswordStrength(newPassword)
       const response = await customFetch.patch(
         '/api/v1/user/update-user-password',
         passwordValues,
@@ -231,25 +227,12 @@ export const useAuth = () => {
       toast.success(response.data.msg)
       dispatch({ type: 'CLEAR_IS_LOADING' })
     } catch (error) {
-      const errMsg = error.response.data
-        ? error.response.data.msg
-        : error.message
+      const errMsg =
+        error.response?.data?.msg || error.message || 'Unkown Error Occurred!'
+
       toast.error(errMsg)
       dispatch({ type: 'CLEAR_IS_LOADING' })
     }
-    // customFetch
-    //   .patch('/api/v1/user/update-user-password', passwordValues)
-    //   .then((response) => {
-    //     toast.success(response.data.msg)
-    //     dispatch({ type: 'CLEAR_IS_LOADING' })
-    //   })
-    //   .catch((error) => {
-    //     const errMsg = error.response.data
-    //       ? error.response.data.msg
-    //       : error.message
-    //     toast.error(errMsg)
-    //     dispatch({ type: 'CLEAR_IS_LOADING' })
-    //   })
   }
 
   return {

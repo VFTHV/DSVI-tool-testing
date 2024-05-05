@@ -3,6 +3,7 @@ import { Button, TextInput, Label } from 'flowbite-react'
 import { useAuth } from './hooks/useAuth'
 import { AuthContext } from '../context/AuthContext'
 import PasswordChecker from './PasswordChecker'
+import { checkPasswordStrength } from '../utils/auth'
 
 const initialPasswordValues = {
   oldPassword: '',
@@ -23,7 +24,6 @@ export default function ChangePasswordUser() {
 
   const onPasswordChangeSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     changePasswordUser(passwordValues)
   }
 
