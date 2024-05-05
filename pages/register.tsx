@@ -85,112 +85,116 @@ export default function Register() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="m-2 flex max-w-md flex-col gap-4">
+    <>
       <h1>Register</h1>
+      <form onSubmit={onSubmit} className="m-2 flex gap-4">
+        <div className="flex flex-1 flex-col gap-4">
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="name" value="Name:" />
+            </div>
+            <TextInput
+              id="name"
+              type="text"
+              name="name"
+              placeholder="John Doe"
+              value={values.name}
+              onChange={handleChange}
+            />
+          </div>
 
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="name" value="Name:" />
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="email" value="Email:" />
+            </div>
+            <TextInput
+              type="email"
+              id="email"
+              name="email"
+              value={values.email}
+              onChange={handleChange}
+              placeholder="john@gmail.com"
+            />
+          </div>
+
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="password" value="Password: " />
+            </div>
+            <TextInput
+              type="password"
+              id="password"
+              name="password"
+              value={values.password}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="confirm-password" value="Confirm Password:" />
+            </div>
+            <TextInput
+              type="password"
+              id="confirm-password"
+              name="confirmPassword"
+              value={values.confirmPassword}
+              onChange={handleChange}
+            />
+          </div>
+          <PasswordChecker
+            password={values.password}
+            confirmPassword={values.confirmPassword}
+          />
         </div>
-        <TextInput
-          id="name"
-          type="text"
-          name="name"
-          placeholder="John Doe"
-          value={values.name}
-          onChange={handleChange}
-        />
-      </div>
 
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="email" value="Email:" />
+        <div className="flex flex-1  flex-col gap-4">
+          <div>
+            <h2>Countries accessible to new user</h2>
+            <div className="flex max-w-md flex-col gap-2" id="checkbox">
+              {countryValues.map((country) => {
+                return (
+                  <div key={country} className="flex items-center gap-2">
+                    <Checkbox
+                      id={country}
+                      onChange={handleCountrySelect}
+                      value={country}
+                      checked={selectedCountries.includes(country)}
+                      color="blue"
+                    />
+                    <Label htmlFor={country}>{country}</Label>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="max-w-md">
+            <div className="mb-2 block">
+              <Label htmlFor="roles" value="New User's Role:" />
+            </div>
+            <Select
+              id="roles"
+              name="role"
+              onChange={handleChange}
+              value={values.role}
+              required
+            >
+              {roleValues.map((role) => {
+                return (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                )
+              })}
+            </Select>
+          </div>
+
+          <Button color="blue" type="submit" disabled={state.isLoading}>
+            {state.isLoading ? 'loading...' : 'Submit'}
+          </Button>
         </div>
-        <TextInput
-          type="email"
-          id="email"
-          name="email"
-          value={values.email}
-          onChange={handleChange}
-          placeholder="john@gmail.com"
-        />
-      </div>
-
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="password" value="Password: " />
-        </div>
-        <TextInput
-          type="password"
-          id="password"
-          name="password"
-          value={values.password}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="confirm-password" value="Confirm Password:" />
-        </div>
-        <TextInput
-          type="password"
-          id="confirm-password"
-          name="confirmPassword"
-          value={values.confirmPassword}
-          onChange={handleChange}
-        />
-      </div>
-
-      <PasswordChecker
-        password={values.password}
-        confirmPassword={values.confirmPassword}
-      />
-
-      <div>
-        <h2>Countries accessible to new user</h2>
-        <div className="flex max-w-md flex-col gap-2" id="checkbox">
-          {countryValues.map((country) => {
-            return (
-              <div key={country} className="flex items-center gap-2">
-                <Checkbox
-                  id={country}
-                  onChange={handleCountrySelect}
-                  value={country}
-                  checked={selectedCountries.includes(country)}
-                  color="blue"
-                />
-                <Label htmlFor={country}>{country}</Label>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
-      <div className="max-w-md">
-        <div className="mb-2 block">
-          <Label htmlFor="roles" value="New User's Role:" />
-        </div>
-        <Select
-          id="roles"
-          name="role"
-          onChange={handleChange}
-          value={values.role}
-          required
-        >
-          {roleValues.map((role) => {
-            return (
-              <option key={role} value={role}>
-                {role}
-              </option>
-            )
-          })}
-        </Select>
-      </div>
-
-      <Button color="blue" type="submit" disabled={state.isLoading}>
-        {state.isLoading ? 'loading...' : 'Submit'}
-      </Button>
-    </form>
+      </form>
+    </>
   )
 }
