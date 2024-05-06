@@ -93,9 +93,12 @@ export default function EditUser() {
           <div>
             <div className="mb-2 block">
               <Label
-                value="Name:"
+                value={`Name ${
+                  !_.isEqual(values.name, userAdminDetails.name)
+                    ? '(edited)'
+                    : ''
+                }:`}
                 htmlFor="name"
-                style={onChangeFontStyle(values.name, userAdminDetails.name)}
               />
             </div>
             <TextInput
@@ -112,9 +115,12 @@ export default function EditUser() {
           <div>
             <div className="mb-2 block">
               <Label
-                value="Email:"
+                value={`Email ${
+                  !_.isEqual(values.email, userAdminDetails.email)
+                    ? '(edited)'
+                    : ''
+                }:`}
                 htmlFor="email"
-                style={onChangeFontStyle(values.email, userAdminDetails.email)}
               />
             </div>
             <TextInput
@@ -132,12 +138,12 @@ export default function EditUser() {
           <div>
             <div className="mb-2 block">
               <Label
-                value="Password:"
+                value={`Password ${
+                  !_.isEqual(values.password, userAdminDetails.password)
+                    ? '(edited)'
+                    : ''
+                }:`}
                 htmlFor="password"
-                style={onChangeFontStyle(
-                  values.password,
-                  userAdminDetails.password
-                )}
               />
             </div>
             <TextInput
@@ -158,8 +164,12 @@ export default function EditUser() {
           <div>
             <div className="mb-2 block">
               <Label
-                htmlFor="roles"
-                value="Account Verified:"
+                htmlFor="verified"
+                value={`Account verified ${
+                  !_.isEqual(values.isVerified, userAdminDetails.isVerified)
+                    ? '(edited)'
+                    : ''
+                }:`}
                 style={onChangeFontStyle(
                   values.isVerified,
                   userAdminDetails.isVerified
@@ -167,7 +177,7 @@ export default function EditUser() {
               />
             </div>
             <Select
-              id="roles"
+              id="verified"
               name="role"
               onChange={onVerificationChange}
               value={values.isVerified ? 'yes' : 'no'}
@@ -184,7 +194,11 @@ export default function EditUser() {
             <div className="mb-2 block">
               <Label
                 htmlFor="roles"
-                value="User's Role:"
+                value={`User's Role ${
+                  !_.isEqual(values.role, userAdminDetails.role)
+                    ? '(edited)'
+                    : ''
+                }:`}
                 style={onChangeFontStyle(values.role, userAdminDetails.role)}
               />
             </div>
@@ -212,7 +226,14 @@ export default function EditUser() {
                 userAdminDetails.countries.sort()
               )}
             >
-              Countries accessible to user
+              Countries accessible to user{' '}
+              {!_.isEqual(
+                values.countries.sort(),
+                userAdminDetails.countries.sort()
+              )
+                ? '(edited)'
+                : ''}
+              :
             </h2>
             <div className="flex max-w-md flex-col gap-2" id="checkbox">
               {countryValues.map((country) => {
