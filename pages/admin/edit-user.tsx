@@ -13,6 +13,8 @@ import { useAuth } from '../../components/hooks/useAuth'
 import { Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
 import PasswordChecker from '../../components/PasswordChecker'
 
+type UADValue = UserAdminDetails[keyof UserAdminDetails]
+
 export default function EditUser() {
   const {
     state: { userAdminDetails },
@@ -65,12 +67,13 @@ export default function EditUser() {
     changeUserDetailsAdmin(values)
   }
 
-  const onChangeFontStyle = (
-    entered: UserAdminDetails[keyof UserAdminDetails],
-    initial: UserAdminDetails[keyof UserAdminDetails]
-  ) => {
+  const onChangeFontStyle = (entered: UADValue, initial: UADValue) => {
     const color = _.isEqual(entered, initial) ? 'initial' : 'red'
     return { color }
+  }
+
+  const onEdited = (entered: UADValue, initial: UADValue) => {
+    return _.isEqual(entered, initial) ? '' : '(edited)'
   }
 
   const [confirmedDelete, setConfirmedDelete] = useState(false)
@@ -93,11 +96,7 @@ export default function EditUser() {
           <div>
             <div className="mb-2 block">
               <Label
-                value={`Name ${
-                  !_.isEqual(values.name, userAdminDetails.name)
-                    ? '(edited)'
-                    : ''
-                }:`}
+                value={`Name ${onEdited(values.name, userAdminDetails.name)}:`}
                 htmlFor="name"
               />
             </div>
@@ -115,11 +114,10 @@ export default function EditUser() {
           <div>
             <div className="mb-2 block">
               <Label
-                value={`Email ${
-                  !_.isEqual(values.email, userAdminDetails.email)
-                    ? '(edited)'
-                    : ''
-                }:`}
+                value={`Email ${onEdited(
+                  values.email,
+                  userAdminDetails.email
+                )}:`}
                 htmlFor="email"
               />
             </div>
@@ -134,15 +132,13 @@ export default function EditUser() {
             />
           </div>
 
-          {/* password needs to conform to backend requirements */}
           <div>
             <div className="mb-2 block">
               <Label
-                value={`Password ${
-                  !_.isEqual(values.password, userAdminDetails.password)
-                    ? '(edited)'
-                    : ''
-                }:`}
+                value={`Password ${onEdited(
+                  values.password,
+                  userAdminDetails.password
+                )}:`}
                 htmlFor="password"
               />
             </div>
@@ -165,15 +161,10 @@ export default function EditUser() {
             <div className="mb-2 block">
               <Label
                 htmlFor="verified"
-                value={`Account verified ${
-                  !_.isEqual(values.isVerified, userAdminDetails.isVerified)
-                    ? '(edited)'
-                    : ''
-                }:`}
-                style={onChangeFontStyle(
+                value={`Account verified ${onEdited(
                   values.isVerified,
                   userAdminDetails.isVerified
-                )}
+                )}:`}
               />
             </div>
             <Select
@@ -194,12 +185,10 @@ export default function EditUser() {
             <div className="mb-2 block">
               <Label
                 htmlFor="roles"
-                value={`User's Role ${
-                  !_.isEqual(values.role, userAdminDetails.role)
-                    ? '(edited)'
-                    : ''
-                }:`}
-                style={onChangeFontStyle(values.role, userAdminDetails.role)}
+                value={`User's Role ${onEdited(
+                  values.role,
+                  userAdminDetails.role
+                )}:`}
               />
             </div>
             <Select
@@ -207,6 +196,7 @@ export default function EditUser() {
               name="role"
               onChange={onChange}
               value={values.role}
+              style={onChangeFontStyle(values.role, userAdminDetails.role)}
               required
             >
               {roleValues.map((role) => {
@@ -220,19 +210,12 @@ export default function EditUser() {
           </div>
 
           <div>
-            <h2
-              style={onChangeFontStyle(
+            <h2>
+              Countries accessible to user{' '}
+              {onEdited(
                 values.countries.sort(),
                 userAdminDetails.countries.sort()
               )}
-            >
-              Countries accessible to user{' '}
-              {!_.isEqual(
-                values.countries.sort(),
-                userAdminDetails.countries.sort()
-              )
-                ? '(edited)'
-                : ''}
               :
             </h2>
             <div className="flex max-w-md flex-col gap-2" id="checkbox">
@@ -246,7 +229,15 @@ export default function EditUser() {
                       color="blue"
                       checked={values.countries.includes(country)}
                     />
-                    <Label htmlFor={country}>{country}</Label>
+                    <Label
+                      htmlFor={country}
+                      style={onChangeFontStyle(
+                        values.countries.sort(),
+                        userAdminDetails.countries.sort()
+                      )}
+                    >
+                      {country}
+                    </Label>
                   </div>
                 )
               })}
