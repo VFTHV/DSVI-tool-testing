@@ -1,10 +1,4 @@
-import React, {
-  ChangeEvent,
-  FormEvent,
-  Fragment,
-  useEffect,
-  useState,
-} from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useContext } from 'react'
 import {
   AuthContext,
@@ -18,47 +12,26 @@ import _ from 'lodash'
 import { useAuth } from '../../components/hooks/useAuth'
 import { Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
 import PasswordChecker from '../../components/PasswordChecker'
-import customFetch from '../../utils/axios'
-import { useRouter } from 'next/router'
-import { getAuthHeaderConfig } from '../../utils/auth'
+import { useFetchAndSetUserAdmin } from '../../components/hooks/useFetchAndSetUserAdmin'
 
 type UADValue = UserAdminDetails[keyof UserAdminDetails]
 
 export default function EditUser() {
   const {
-    dispatch,
     state: { userAdminDetails },
     state,
   } = useContext(AuthContext)
 
   const { changeUserDetailsAdmin, deleteUserAccount } = useAuth()
-
-  const [values, setValues] = useState<UserAdminDetails>(userAdminDetails)
+  const [values, setValues] = useState<UserAdminDetails>(null)
   const [confirmedDelete, setConfirmedDelete] = useState(false)
 
-  const router = useRouter()
-  useEffect(() => {
-    const { userId } = router.query
-    if (!userId) return
+  useFetchAndSetUserAdmin()
 
-    customFetch
-      .get(`/api/v1/user/get-user`, {
-        params: { userId },
-        ...getAuthHeaderConfig(),
-      })
-      .then((response) => {
-        console.log(response)
-        const user = response.data.user
-        user.password = ''
-        setValues(user)
-        dispatch({ type: 'SET_USER_ADMIN_DETAILS', payload: user })
-      })
-      .catch((error) => {
-        const errMsg =
-          error.response?.data?.msg || error.message || 'Unkown Error Occurred'
-        toast.error(errMsg)
-      })
-  }, [router.query])
+  useEffect(() => {
+    if (!userAdminDetails) return
+    setValues(userAdminDetails)
+  }, [userAdminDetails])
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const name = e.target.name
@@ -121,7 +94,7 @@ export default function EditUser() {
   }
 
   if (state.user?.role !== 'admin') return <>Not admin</>
-  if (!userAdminDetails) return <>No data to display</>
+  if (!userAdminDetails || !values) return <>No data to display</>
 
   return (
     <>

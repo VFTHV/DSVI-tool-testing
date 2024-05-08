@@ -40,11 +40,15 @@ export type AuthInitialStateType = {
 
 export type AuthProviderActionType =
   | {
-      type: 'SET_USER_ADMIN_DETAILS' | 'CLEAR_USER_ADMIN_DETAILS' | 'SET_USER'
+      type: 'SET_USER_ADMIN_DETAILS' | 'SET_USER'
       payload: any
     }
   | {
-      type: 'SET_IS_LOADING' | 'CLEAR_IS_LOADING' | 'CLEAR_USER'
+      type:
+        | 'SET_IS_LOADING'
+        | 'CLEAR_IS_LOADING'
+        | 'CLEAR_USER'
+        | 'CLEAR_USER_ADMIN_DETAILS'
     }
 
 type AuthContextType = {
