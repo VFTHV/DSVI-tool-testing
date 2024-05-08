@@ -5,12 +5,11 @@ import {
   SelectedCountryType,
   UserAdminDetails,
   countryValues,
-  roleValues,
 } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
 import _ from 'lodash'
 import { useAuth } from '../../components/hooks/useAuth'
-import { Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
+import { Button, Checkbox, Label, Select } from 'flowbite-react'
 import PasswordChecker from '../../components/PasswordChecker'
 import { useFetchAndSetUserAdmin } from '../../components/hooks/useFetchAndSetUserAdmin'
 import EditUserInput from '../../components/EditUserInput'
@@ -40,7 +39,7 @@ export default function EditUser() {
     const value = e.target.value
     setValues({ ...values, [name]: value })
   }
-  // console.log(values)
+
   const onCountrySelect = (e: ChangeEvent<HTMLInputElement>) => {
     const value: SelectedCountryType = e.target.value as SelectedCountryType
     if (values.countries.includes(value)) {
