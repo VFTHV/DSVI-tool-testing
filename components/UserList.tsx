@@ -11,10 +11,14 @@ export default function UserList({ users }: UserListPropsType) {
   const { dispatch } = useContext(AuthContext)
   const router = useRouter()
 
-  const onAddUserToContext = (user: UserAdminDetails) => {
-    user.password = '' // to set initial value
-    dispatch({ type: 'SET_USER_ADMIN_DETAILS', payload: user })
-    router.push('/admin/edit-user')
+  const onClick = (user: UserAdminDetails) => {
+    // user.password = '' // to set initial value
+    // dispatch({ type: 'SET_USER_ADMIN_DETAILS', payload: user })
+    // router.push('/admin/edit-user')
+    router.push({
+      pathname: '/admin/edit-user',
+      query: { userId: user._id },
+    })
   }
 
   if (!users.length) return <></>
@@ -49,7 +53,7 @@ export default function UserList({ users }: UserListPropsType) {
 
                 <Table.Cell>
                   <a
-                    onClick={() => onAddUserToContext(user)}
+                    onClick={() => onClick(user)}
                     className="cursor-pointer font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                   >
                     Edit

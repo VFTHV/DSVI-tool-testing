@@ -1,4 +1,10 @@
-import React, { ChangeEvent, FormEvent, Fragment, useState } from 'react'
+import React, {
+  ChangeEvent,
+  FormEvent,
+  Fragment,
+  useEffect,
+  useState,
+} from 'react'
 import { useContext } from 'react'
 import {
   AuthContext,
@@ -12,21 +18,48 @@ import _ from 'lodash'
 import { useAuth } from '../../components/hooks/useAuth'
 import { Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
 import PasswordChecker from '../../components/PasswordChecker'
+import customFetch from '../../utils/axios'
+import { useRouter } from 'next/router'
+import { getAuthHeaderConfig } from '../../utils/auth'
 
 type UADValue = UserAdminDetails[keyof UserAdminDetails]
 
 export default function EditUser() {
   const {
+    dispatch,
     state: { userAdminDetails },
     state,
   } = useContext(AuthContext)
 
   const { changeUserDetailsAdmin, deleteUserAccount } = useAuth()
 
-  if (!userAdminDetails) return <>No data to display</>
-  if (state.user?.role !== 'admin') return <>Not admin</>
-
   const [values, setValues] = useState<UserAdminDetails>(userAdminDetails)
+  const [confirmedDelete, setConfirmedDelete] = useState(false)
+
+  const router = useRouter()
+  useEffect(() => {
+    const { userId } = router.query
+    if (!userId) return
+
+    customFetch
+      .get(`/api/v1/user/get-user`, {
+        params: { userId },
+        ...getAuthHeaderConfig(),
+      })
+      .then((response) => {
+        console.log(response)
+        const user = response.data.user
+        user.password = ''
+        setValues(user)
+        dispatch({ type: 'SET_USER_ADMIN_DETAILS', payload: user })
+      })
+      .catch((error) => {
+        const errMsg =
+          error.response?.data?.msg || error.message || 'Unkown Error Occurred'
+        toast.error(errMsg)
+      })
+  }, [router.query])
+
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const name = e.target.name
     const value = e.target.value
@@ -76,7 +109,6 @@ export default function EditUser() {
     return _.isEqual(entered, initial) ? '' : '(edited)'
   }
 
-  const [confirmedDelete, setConfirmedDelete] = useState(false)
   const onUserDelete = () => {
     if (!confirmedDelete) {
       toast.info('Please press Delete User again to DELETE user account', {
@@ -87,6 +119,9 @@ export default function EditUser() {
     }
     deleteUserAccount(values._id)
   }
+
+  if (state.user?.role !== 'admin') return <>Not admin</>
+  if (!userAdminDetails) return <>No data to display</>
 
   return (
     <>
