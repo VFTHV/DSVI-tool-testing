@@ -13,6 +13,7 @@ import { useAuth } from '../../components/hooks/useAuth'
 import { Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
 import PasswordChecker from '../../components/PasswordChecker'
 import { useFetchAndSetUserAdmin } from '../../components/hooks/useFetchAndSetUserAdmin'
+import EditUserInput from '../../components/EditUserInput'
 
 type UADValue = UserAdminDetails[keyof UserAdminDetails]
 
