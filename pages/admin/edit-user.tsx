@@ -14,6 +14,7 @@ import { Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
 import PasswordChecker from '../../components/PasswordChecker'
 import { useFetchAndSetUserAdmin } from '../../components/hooks/useFetchAndSetUserAdmin'
 import EditUserInput from '../../components/EditUserInput'
+import EditUserSelect from '../../components/EditUserSelect'
 
 type UADValue = UserAdminDetails[keyof UserAdminDetails]
 
@@ -39,7 +40,7 @@ export default function EditUser() {
     const value = e.target.value
     setValues({ ...values, [name]: value })
   }
-
+  // console.log(values)
   const onCountrySelect = (e: ChangeEvent<HTMLInputElement>) => {
     const value: SelectedCountryType = e.target.value as SelectedCountryType
     if (values.countries.includes(value)) {
@@ -102,70 +103,32 @@ export default function EditUser() {
       <h1 className="text-center text-lg font-bold">EDIT USER</h1>
       <form onSubmit={onSubmit} className="m-2 flex flex-col gap-4 sm:flex-row">
         <div className="flex flex-1 flex-col gap-4">
-          <div>
-            <div className="mb-2 block">
-              <Label
-                value={`Name ${onEdited(values.name, userAdminDetails.name)}:`}
-                htmlFor="name"
-              />
-            </div>
-            <TextInput
-              type="text"
-              id="name"
-              name="name"
-              value={values.name}
-              onChange={onChange}
-              shadow
-              style={onChangeFontStyle(values.name, userAdminDetails.name)}
-            />
-          </div>
+          <EditUserInput
+            values={values}
+            setValues={setValues}
+            fieldKey="name"
+            identifier="name"
+            title="Name"
+          />
 
-          <div>
-            <div className="mb-2 block">
-              <Label
-                value={`Email ${onEdited(
-                  values.email,
-                  userAdminDetails.email
-                )}:`}
-                htmlFor="email"
-              />
-            </div>
-            <TextInput
-              type="text"
-              name="email"
-              value={values.email.trim()}
-              onChange={onChange}
-              id="email"
-              shadow
-              style={onChangeFontStyle(values.email, userAdminDetails.email)}
-            />
-          </div>
+          <EditUserInput
+            values={values}
+            setValues={setValues}
+            fieldKey="email"
+            identifier="email"
+            title="Email"
+          />
 
-          <div>
-            <div className="mb-2 block">
-              <Label
-                value={`Password ${onEdited(
-                  values.password,
-                  userAdminDetails.password
-                )}:`}
-                htmlFor="password"
-              />
-            </div>
-            <TextInput
-              type="text"
-              name="password"
-              value={values.password}
-              onChange={onChange}
-              id="password"
-              shadow
-              style={onChangeFontStyle(
-                values.password,
-                userAdminDetails.password
-              )}
-            />
-          </div>
+          <EditUserInput
+            values={values}
+            setValues={setValues}
+            fieldKey="password"
+            identifier="password"
+            title="Password"
+          />
 
           <PasswordChecker password={values.password} />
+
           <div>
             <div className="mb-2 block">
               <Label
@@ -181,6 +144,10 @@ export default function EditUser() {
               name="role"
               onChange={onVerificationChange}
               value={values.isVerified ? 'yes' : 'no'}
+              style={onChangeFontStyle(
+                values.isVerified,
+                userAdminDetails.isVerified
+              )}
               required
             >
               <option value="yes">Yes</option>
@@ -190,33 +157,14 @@ export default function EditUser() {
         </div>
 
         <div className="flex flex-1 flex-col gap-4">
-          <div>
-            <div className="mb-2 block">
-              <Label
-                htmlFor="roles"
-                value={`User's Role ${onEdited(
-                  values.role,
-                  userAdminDetails.role
-                )}:`}
-              />
-            </div>
-            <Select
-              id="roles"
-              name="role"
-              onChange={onChange}
-              value={values.role}
-              style={onChangeFontStyle(values.role, userAdminDetails.role)}
-              required
-            >
-              {roleValues.map((role) => {
-                return (
-                  <option key={role} value={role}>
-                    {role}
-                  </option>
-                )
-              })}
-            </Select>
-          </div>
+          <EditUserSelect
+            valuesArr={['user', 'admin']}
+            values={values}
+            onChange={onChange}
+            fieldKey="role"
+            identifier="role"
+            title="Role"
+          />
 
           <div>
             <h2>

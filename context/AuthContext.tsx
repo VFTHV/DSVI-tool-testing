@@ -26,7 +26,7 @@ export type UserAdminDetails = {
   email: string
   isVerified: boolean
   verificationToken: string
-  verified: string
+  verified: 'yes' | 'no'
   __v: number
   password?: string
 }

@@ -9,7 +9,7 @@ export const useFetchAndSetUserAdmin = () => {
   const { dispatch } = useContext(AuthContext)
 
   const router = useRouter()
-  console.log('router route: ', router.route)
+
   useEffect(() => {
     const { userId } = router.query
     if (!userId) return
@@ -21,7 +21,6 @@ export const useFetchAndSetUserAdmin = () => {
         ...getAuthHeaderConfig(),
       })
       .then((response) => {
-        console.log(response)
         const user = response.data.user
         user.password = ''
 
