@@ -144,8 +144,8 @@ export const useAuth = () => {
       )
 
       toast.success(response.data.msg)
-      router.push('/admin')
-      dispatch({ type: 'CLEAR_USER_ADMIN_DETAILS' })
+
+      dispatch({ type: 'SET_USER_ADMIN_DETAILS', payload: response.data.user })
       dispatch({ type: 'CLEAR_IS_LOADING' })
     } catch (error) {
       const errMsg =

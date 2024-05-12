@@ -72,7 +72,10 @@ export const AuthProvider = ({ children }) => {
   ): AuthInitialStateType => {
     switch (action.type) {
       case 'SET_USER_ADMIN_DETAILS': {
-        return { ...state, userAdminDetails: action.payload }
+        return {
+          ...state,
+          userAdminDetails: { ...action.payload, password: '' },
+        }
       }
       case 'CLEAR_USER_ADMIN_DETAILS': {
         return { ...state, userAdminDetails: null }

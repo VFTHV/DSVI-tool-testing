@@ -22,7 +22,6 @@ export const useFetchAndSetUserAdmin = () => {
       })
       .then((response) => {
         const user = response.data.user
-        user.password = ''
 
         dispatch({ type: 'SET_USER_ADMIN_DETAILS', payload: user })
       })
