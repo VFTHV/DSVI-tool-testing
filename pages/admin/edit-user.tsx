@@ -53,24 +53,6 @@ export default function EditUser() {
     setValues({ ...values, [name]: value })
   }
 
-  const onVerificationChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    console.log('onVerificationChange')
-
-    const name = e.target.name
-    const value = e.target.value
-
-    console.log('name: ', name)
-    console.log('value: ', value)
-
-    if (value.toLowerCase() === 'yes') {
-      setValues({ ...values, [name]: true })
-    } else {
-      setValues({ ...values, [name]: false })
-    }
-  }
-
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const isFormUpdated = !_.isEqual(values, userAdminDetails)
@@ -139,35 +121,9 @@ export default function EditUser() {
           <EditUserIsVerified
             options={['yes', 'no']}
             values={values}
-            onChange={onVerificationChange}
+            setValues={setValues}
             title="Account verified component"
           />
-
-          <div>
-            <div className="mb-2 block">
-              <Label
-                htmlFor="verified"
-                value={`Account verified ${onEdited(
-                  values.isVerified,
-                  userAdminDetails.isVerified
-                )}:`}
-              />
-            </div>
-            <Select
-              id="verified"
-              name="verified"
-              onChange={onVerificationChange}
-              value={values.isVerified ? 'yes' : 'no'}
-              style={onChangeFontStyle(
-                values.isVerified,
-                userAdminDetails.isVerified
-              )}
-              required
-            >
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </Select>
-          </div>
         </div>
 
         <div className="flex flex-1 flex-col gap-4">

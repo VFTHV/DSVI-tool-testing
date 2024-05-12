@@ -1,4 +1,4 @@
-import React, { useContext, ChangeEvent } from 'react'
+import React, { useContext, ChangeEvent, useState, useEffect } from 'react'
 import { AuthContext, UserAdminDetails } from '../context/AuthContext'
 import { Label, Select } from 'flowbite-react'
 import _ from 'lodash'
@@ -6,19 +6,28 @@ import _ from 'lodash'
 type Props = {
   options: UserAdminDetails['verified'][]
   values: UserAdminDetails
-  onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
+  setValues: React.Dispatch<React.SetStateAction<UserAdminDetails>>
   title: string
 }
 
 export default function EditUserIsVerified({
   options,
   values,
-  onChange,
+  setValues,
   title,
 }: Props) {
-  const {
-    state: { userAdminDetails },
-  } = useContext(AuthContext)
+  const { state } = useContext(AuthContext)
+
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const name = e.target.name
+    const value = e.target.value
+
+    if (value.toLowerCase() === 'yes') {
+      setValues({ ...values, [name]: true })
+    } else {
+      setValues({ ...values, [name]: false })
+    }
+  }
 
   const onChangeFontStyle = (
     entered: UserAdminDetails['isVerified'],
@@ -35,6 +44,8 @@ export default function EditUserIsVerified({
     return _.isEqual(entered, initial) ? '' : '(edited)'
   }
 
+  if (!state.userAdminDetails || !values) return <>No data to display</>
+
   return (
     <div>
       <div className="mb-2 block">
@@ -42,7 +53,7 @@ export default function EditUserIsVerified({
           htmlFor="isVerified"
           value={`${title} ${onEdited(
             values.isVerified,
-            userAdminDetails.isVerified
+            state.userAdminDetails.isVerified
           )}:`}
         />
       </div>
@@ -53,7 +64,7 @@ export default function EditUserIsVerified({
         value={values.isVerified ? 'yes' : 'no'}
         style={onChangeFontStyle(
           values.isVerified,
-          userAdminDetails.isVerified
+          state.userAdminDetails.isVerified
         )}
         required
       >
