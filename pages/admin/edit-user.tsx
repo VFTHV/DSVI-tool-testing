@@ -14,6 +14,7 @@ import PasswordChecker from '../../components/PasswordChecker'
 import { useFetchAndSetUserAdmin } from '../../components/hooks/useFetchAndSetUserAdmin'
 import EditUserInput from '../../components/EditUserInput'
 import EditUserSelect from '../../components/EditUserSelect'
+import EditUserIsVerified from '../../components/EditUserIsVerified'
 
 type UADValue = UserAdminDetails[keyof UserAdminDetails]
 
@@ -34,12 +35,6 @@ export default function EditUser() {
     setValues(userAdminDetails)
   }, [userAdminDetails])
 
-  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const name = e.target.name
-    const value = e.target.value
-    setValues({ ...values, [name]: value })
-  }
-
   const onCountrySelect = (e: ChangeEvent<HTMLInputElement>) => {
     const value: SelectedCountryType = e.target.value as SelectedCountryType
     if (values.countries.includes(value)) {
@@ -52,14 +47,27 @@ export default function EditUser() {
     }
   }
 
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const name = e.target.name
+    const value = e.target.value
+    setValues({ ...values, [name]: value })
+  }
+
   const onVerificationChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    console.log('onVerificationChange')
+
+    const name = e.target.name
     const value = e.target.value
+
+    console.log('name: ', name)
+    console.log('value: ', value)
+
     if (value.toLowerCase() === 'yes') {
-      setValues({ ...values, isVerified: true })
+      setValues({ ...values, [name]: true })
     } else {
-      setValues({ ...values, isVerified: false })
+      setValues({ ...values, [name]: false })
     }
   }
 
@@ -128,6 +136,13 @@ export default function EditUser() {
 
           <PasswordChecker password={values.password} />
 
+          <EditUserIsVerified
+            options={['yes', 'no']}
+            values={values}
+            onChange={onVerificationChange}
+            title="Account verified component"
+          />
+
           <div>
             <div className="mb-2 block">
               <Label
@@ -140,7 +155,7 @@ export default function EditUser() {
             </div>
             <Select
               id="verified"
-              name="role"
+              name="verified"
               onChange={onVerificationChange}
               value={values.isVerified ? 'yes' : 'no'}
               style={onChangeFontStyle(
@@ -157,7 +172,7 @@ export default function EditUser() {
 
         <div className="flex flex-1 flex-col gap-4">
           <EditUserSelect
-            valuesArr={['user', 'admin']}
+            options={['user', 'admin']}
             values={values}
             onChange={onChange}
             fieldKey="role"

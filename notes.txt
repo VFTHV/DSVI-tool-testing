@@ -69,6 +69,7 @@ Plans:
         check if user's countries authorization array contains(country) --> next()
     * front end: create api functionality to request layers
     * re-organize files in /pages according to nextjs best practices
+    * change names of some components: ask ChatGPT for advice
 
     
 

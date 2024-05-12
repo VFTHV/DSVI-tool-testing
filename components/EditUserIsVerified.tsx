@@ -3,39 +3,35 @@ import { AuthContext, UserAdminDetails } from '../context/AuthContext'
 import { Label, Select } from 'flowbite-react'
 import _ from 'lodash'
 
-type UADValue = UserAdminDetails[keyof UserAdminDetails]
-
-type StringKey<T> = {
-  [K in keyof T]: T[K] extends string ? K : never
-}[keyof T]
-
 type Props = {
-  options: UserAdminDetails['role'][]
+  options: UserAdminDetails['verified'][]
   values: UserAdminDetails
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
-  fieldKey: StringKey<UserAdminDetails>
-  identifier: string
   title: string
 }
 
-export default function EditUserSelect({
+export default function EditUserIsVerified({
   options,
   values,
   onChange,
-  fieldKey,
-  identifier,
   title,
 }: Props) {
   const {
     state: { userAdminDetails },
   } = useContext(AuthContext)
 
-  const onChangeFontStyle = (entered: UADValue, initial: UADValue) => {
+  const onChangeFontStyle = (
+    entered: UserAdminDetails['isVerified'],
+    initial: UserAdminDetails['isVerified']
+  ) => {
     const color = _.isEqual(entered, initial) ? 'initial' : 'red'
     return { color }
   }
 
-  const onEdited = (entered: UADValue, initial: UADValue) => {
+  const onEdited = (
+    entered: UserAdminDetails['isVerified'],
+    initial: UserAdminDetails['isVerified']
+  ) => {
     return _.isEqual(entered, initial) ? '' : '(edited)'
   }
 
@@ -43,25 +39,28 @@ export default function EditUserSelect({
     <div>
       <div className="mb-2 block">
         <Label
-          htmlFor={identifier}
+          htmlFor="isVerified"
           value={`${title} ${onEdited(
-            values[fieldKey],
-            userAdminDetails[fieldKey]
+            values.isVerified,
+            userAdminDetails.isVerified
           )}:`}
         />
       </div>
       <Select
-        id={identifier}
-        name={identifier}
+        id="isVerified"
+        name="isVerified"
         onChange={onChange}
-        value={values[fieldKey]}
-        style={onChangeFontStyle(values[fieldKey], userAdminDetails[fieldKey])}
+        value={values.isVerified ? 'yes' : 'no'}
+        style={onChangeFontStyle(
+          values.isVerified,
+          userAdminDetails.isVerified
+        )}
         required
       >
-        {options.map((role) => {
+        {options.map((item) => {
           return (
-            <option key={role} value={role}>
-              {role}
+            <option key={item} value={item}>
+              {item}
             </option>
           )
         })}
