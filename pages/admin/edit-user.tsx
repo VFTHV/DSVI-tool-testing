@@ -1,15 +1,10 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import { useContext } from 'react'
-import {
-  AuthContext,
-  SelectedCountryType,
-  UserAdminDetails,
-  countryValues,
-} from '../../context/AuthContext'
+import { AuthContext, UserAdminDetails } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
 import _ from 'lodash'
 import { useAuth } from '../../components/hooks/useAuth'
-import { Button, Checkbox, Label, Select } from 'flowbite-react'
+import { Button } from 'flowbite-react'
 import PasswordChecker from '../../components/PasswordChecker'
 import { useFetchAndSetUserAdmin } from '../../components/hooks/useFetchAndSetUserAdmin'
 import EditUserInput from '../../components/EditUserInput'
