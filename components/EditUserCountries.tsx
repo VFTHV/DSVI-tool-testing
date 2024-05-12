@@ -19,6 +19,7 @@ export default function EditUserCountries({
   options,
   values,
   setValues,
+  title,
 }: Props) {
   const { state } = useContext(AuthContext)
 
@@ -46,7 +47,7 @@ export default function EditUserCountries({
   return (
     <div>
       <h2>
-        Countries accessible to user{' '}
+        {title}
         {onEdited(
           values.countries.sort(),
           state.userAdminDetails.countries.sort()

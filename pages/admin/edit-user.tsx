@@ -15,6 +15,7 @@ import { useFetchAndSetUserAdmin } from '../../components/hooks/useFetchAndSetUs
 import EditUserInput from '../../components/EditUserInput'
 import EditUserSelect from '../../components/EditUserSelect'
 import EditUserIsVerified from '../../components/EditUserIsVerified'
+import EditUserCountries from '../../components/EditUserCountries'
 
 export type UADValue = UserAdminDetails[keyof UserAdminDetails]
 
@@ -35,18 +36,6 @@ export default function EditUser() {
     setValues(userAdminDetails)
   }, [userAdminDetails])
 
-  const onCountrySelect = (e: ChangeEvent<HTMLInputElement>) => {
-    const value: SelectedCountryType = e.target.value as SelectedCountryType
-    if (values.countries.includes(value)) {
-      setValues({
-        ...values,
-        countries: values.countries.filter((country) => country !== value),
-      })
-    } else {
-      setValues({ ...values, countries: [...values.countries, value] })
-    }
-  }
-
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const isFormUpdated = !_.isEqual(values, userAdminDetails)
@@ -56,15 +45,6 @@ export default function EditUser() {
       return
     }
     changeUserDetailsAdmin(values)
-  }
-
-  const onChangeFontStyle = (entered: UADValue, initial: UADValue) => {
-    const color = _.isEqual(entered, initial) ? 'initial' : 'red'
-    return { color }
-  }
-
-  const onEdited = (entered: UADValue, initial: UADValue) => {
-    return _.isEqual(entered, initial) ? '' : '(edited)'
   }
 
   const onUserDelete = () => {
@@ -126,40 +106,12 @@ export default function EditUser() {
             title="Role"
           />
 
-          <div>
-            <h2>
-              Countries accessible to user{' '}
-              {onEdited(
-                values.countries.sort(),
-                userAdminDetails.countries.sort()
-              )}
-              :
-            </h2>
-            <div className="flex max-w-md flex-col gap-2" id="checkbox">
-              {countryValues.map((country) => {
-                return (
-                  <div key={country} className="flex items-center gap-2">
-                    <Checkbox
-                      id={country}
-                      onChange={onCountrySelect}
-                      value={country}
-                      color="blue"
-                      checked={values.countries.includes(country)}
-                    />
-                    <Label
-                      htmlFor={country}
-                      style={onChangeFontStyle(
-                        values.countries.sort(),
-                        userAdminDetails.countries.sort()
-                      )}
-                    >
-                      {country}
-                    </Label>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
+          <EditUserCountries
+            options={['Tajikistan', 'Niger', 'Burkina Faso']}
+            values={values}
+            setValues={setValues}
+            title="Countries accessible to user"
+          />
 
           <Button color="blue" type="submit" disabled={state.isLoading}>
             {state.isLoading ? 'loading...' : 'Submit Changes'}
