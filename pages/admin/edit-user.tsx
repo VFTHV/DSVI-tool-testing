@@ -16,7 +16,7 @@ import EditUserInput from '../../components/EditUserInput'
 import EditUserSelect from '../../components/EditUserSelect'
 import EditUserIsVerified from '../../components/EditUserIsVerified'
 
-type UADValue = UserAdminDetails[keyof UserAdminDetails]
+export type UADValue = UserAdminDetails[keyof UserAdminDetails]
 
 export default function EditUser() {
   const {
@@ -45,12 +45,6 @@ export default function EditUser() {
     } else {
       setValues({ ...values, countries: [...values.countries, value] })
     }
-  }
-
-  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const name = e.target.name
-    const value = e.target.value
-    setValues({ ...values, [name]: value })
   }
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -96,7 +90,6 @@ export default function EditUser() {
             values={values}
             setValues={setValues}
             fieldKey="name"
-            identifier="name"
             title="Name"
           />
 
@@ -104,7 +97,6 @@ export default function EditUser() {
             values={values}
             setValues={setValues}
             fieldKey="email"
-            identifier="email"
             title="Email"
           />
 
@@ -112,7 +104,6 @@ export default function EditUser() {
             values={values}
             setValues={setValues}
             fieldKey="password"
-            identifier="password"
             title="Password"
           />
 
@@ -122,7 +113,7 @@ export default function EditUser() {
             options={['yes', 'no']}
             values={values}
             setValues={setValues}
-            title="Account verified component"
+            title="Account verified"
           />
         </div>
 
@@ -130,9 +121,8 @@ export default function EditUser() {
           <EditUserSelect
             options={['user', 'admin']}
             values={values}
-            onChange={onChange}
+            setValues={setValues}
             fieldKey="role"
-            identifier="role"
             title="Role"
           />
 

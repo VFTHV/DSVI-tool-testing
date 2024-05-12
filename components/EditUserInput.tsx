@@ -2,8 +2,7 @@ import React, { useContext, ChangeEvent } from 'react'
 import { AuthContext, UserAdminDetails } from '../context/AuthContext'
 import { Label, TextInput } from 'flowbite-react'
 import _ from 'lodash'
-
-type UADValue = UserAdminDetails[keyof UserAdminDetails]
+import { UADValue } from '../pages/admin/edit-user'
 
 type StringKey<T> = {
   [K in keyof T]: T[K] extends string ? K : never
@@ -13,7 +12,6 @@ type Props = {
   values: UserAdminDetails
   setValues: React.Dispatch<React.SetStateAction<UserAdminDetails>>
   fieldKey: StringKey<UserAdminDetails>
-  identifier: string
   title: string
 }
 
@@ -21,7 +19,6 @@ export default function EditUserInput({
   values,
   setValues,
   fieldKey,
-  identifier,
   title,
 }: Props) {
   const {
@@ -51,13 +48,13 @@ export default function EditUserInput({
             values[fieldKey],
             userAdminDetails[fieldKey]
           )}:`}
-          htmlFor={identifier}
+          htmlFor={fieldKey}
         />
       </div>
       <TextInput
         type="text"
-        id={identifier}
-        name={identifier}
+        id={fieldKey}
+        name={fieldKey}
         value={values[fieldKey]}
         onChange={onChange}
         shadow

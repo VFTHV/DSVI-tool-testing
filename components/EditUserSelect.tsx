@@ -12,23 +12,27 @@ type StringKey<T> = {
 type Props = {
   options: UserAdminDetails['role'][]
   values: UserAdminDetails
-  onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
+  setValues: React.Dispatch<React.SetStateAction<UserAdminDetails>>
   fieldKey: StringKey<UserAdminDetails>
-  identifier: string
   title: string
 }
 
 export default function EditUserSelect({
   options,
   values,
-  onChange,
+  setValues,
   fieldKey,
-  identifier,
   title,
 }: Props) {
   const {
     state: { userAdminDetails },
   } = useContext(AuthContext)
+
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const name = e.target.name
+    const value = e.target.value
+    setValues({ ...values, [name]: value })
+  }
 
   const onChangeFontStyle = (entered: UADValue, initial: UADValue) => {
     const color = _.isEqual(entered, initial) ? 'initial' : 'red'
@@ -43,7 +47,7 @@ export default function EditUserSelect({
     <div>
       <div className="mb-2 block">
         <Label
-          htmlFor={identifier}
+          htmlFor={fieldKey}
           value={`${title} ${onEdited(
             values[fieldKey],
             userAdminDetails[fieldKey]
@@ -51,17 +55,17 @@ export default function EditUserSelect({
         />
       </div>
       <Select
-        id={identifier}
-        name={identifier}
+        id={fieldKey}
+        name={fieldKey}
         onChange={onChange}
         value={values[fieldKey]}
         style={onChangeFontStyle(values[fieldKey], userAdminDetails[fieldKey])}
         required
       >
-        {options.map((role) => {
+        {options.map((item) => {
           return (
-            <option key={role} value={role}>
-              {role}
+            <option key={item} value={item}>
+              {item}
             </option>
           )
         })}
