@@ -149,7 +149,7 @@ export const useAuth = () => {
       dispatch({ type: 'CLEAR_IS_LOADING' })
     } catch (error) {
       const errMsg =
-        error.response?.data?.msg || error.message || 'Unknown Error Occurred!'
+        error.response?.data?.msg || error.message || 'Unkown Error Occurred!'
 
       toast.error(errMsg)
       dispatch({ type: 'CLEAR_IS_LOADING' })
@@ -164,9 +164,8 @@ export const useAuth = () => {
         router.push('/admin')
       })
       .catch((error) => {
-        const errMsg = error.response.data
-          ? error.response.data.msg
-          : error.message
+        const errMsg =
+          error.response?.data?.msg || error.message || 'Unkown Error Occurred!'
         toast.error(errMsg)
       })
   }

@@ -40,9 +40,8 @@ export default function ChangeDetailsUser() {
         dispatch({ type: 'CLEAR_IS_LOADING' })
       })
       .catch((error) => {
-        const errMsg = error.response.data
-          ? error.response.data.msg
-          : error.message
+        const errMsg =
+          error.response?.data?.msg || error.message || 'Unkown Error Occurred!'
         toast.error(errMsg)
         dispatch({ type: 'CLEAR_IS_LOADING' })
       })
