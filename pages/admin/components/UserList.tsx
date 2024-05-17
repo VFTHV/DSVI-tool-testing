@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { AuthContext, UserAdminDetails } from '../context/AuthContext'
+import { AuthContext, UserAdminDetails } from '../../../context/AuthContext'
 import { useRouter } from 'next/router'
 import { Table } from 'flowbite-react'
 

@@ -1,5 +1,5 @@
 import React, { useContext, ChangeEvent, useState, useEffect } from 'react'
-import { AuthContext, UserAdminDetails } from '../context/AuthContext'
+import { AuthContext, UserAdminDetails } from '../../../../context/AuthContext'
 import { Label, Select } from 'flowbite-react'
 import _ from 'lodash'
 

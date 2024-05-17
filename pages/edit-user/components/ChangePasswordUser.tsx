@@ -1,9 +1,9 @@
 import React, { ChangeEvent, FormEvent, useContext, useState } from 'react'
 import { Button, TextInput, Label } from 'flowbite-react'
-import { useAuth } from './hooks/useAuth'
-import { AuthContext } from '../context/AuthContext'
-import PasswordChecker from './PasswordChecker'
-import { checkPasswordStrength } from '../utils/auth'
+import { useAuth } from '../../../components/hooks/useAuth'
+import { AuthContext } from '../../../context/AuthContext'
+import PasswordChecker from '../../../components/PasswordChecker'
+import { checkPasswordStrength } from '../../../utils/auth'
 
 const initialPasswordValues = {
   oldPassword: '',

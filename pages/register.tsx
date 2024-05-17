@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  FormEvent,
-  ChangeEvent,
-  useContext,
-  Fragment,
-} from 'react'
+import React, { useState, FormEvent, ChangeEvent, useContext } from 'react'
 import {
   AuthContext,
   RoleType,

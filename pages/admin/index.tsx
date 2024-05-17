@@ -4,7 +4,7 @@ import { Button, TextInput, Label } from 'flowbite-react'
 import { AuthContext, UserAdminDetails } from '../../context/AuthContext'
 import customFetch from '../../utils/axios'
 import { toast } from 'react-toastify'
-import UserList from '../../components/UserList'
+import UserList from './components/UserList'
 import { getAuthHeaderConfig } from '../../utils/auth'
 
 export default function Admin() {

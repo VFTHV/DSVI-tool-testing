@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
-import ChangePasswordUser from '../components/ChangePasswordUser'
-import ChangeDetailsUser from '../components/ChangeDetailsUser'
-import { AuthContext } from '../context/AuthContext'
+import ChangePasswordUser from './components/ChangePasswordUser'
+import ChangeDetailsUser from './components/ChangeDetailsUser'
+import { AuthContext } from '../../context/AuthContext'
 
 export default function EditUser() {
   const { state } = useContext(AuthContext)

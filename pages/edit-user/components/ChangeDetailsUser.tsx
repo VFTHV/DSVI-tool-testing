@@ -1,9 +1,9 @@
 import React, { FormEvent, useContext, useState } from 'react'
 import { Button, TextInput, Label } from 'flowbite-react'
-import { AuthContext } from '../context/AuthContext'
-import customFetch from '../utils/axios'
+import { AuthContext } from '../../../context/AuthContext'
+import customFetch from '../../../utils/axios'
 import { toast } from 'react-toastify'
-import { getAuthHeaderConfig } from '../utils/auth'
+import { getAuthHeaderConfig } from '../../../utils/auth'
 
 export default function ChangeDetailsUser() {
   const { state, dispatch } = useContext(AuthContext)
@@ -31,7 +31,6 @@ export default function ChangeDetailsUser() {
 
     dispatch({ type: 'SET_IS_LOADING' })
 
-    getAuthHeaderConfig()
     customFetch
       .patch('api/v1/user/update-user', { name, email }, getAuthHeaderConfig())
       .then((response) => {

@@ -1,8 +1,8 @@
 import React, { useContext, ChangeEvent } from 'react'
-import { AuthContext, UserAdminDetails } from '../context/AuthContext'
+import { AuthContext, UserAdminDetails } from '../../../../context/AuthContext'
 import { Label, TextInput } from 'flowbite-react'
 import _ from 'lodash'
-import { UADValue } from '../pages/admin/edit-user'
+import { UADValue } from '..'
 
 type StringKey<T> = {
   [K in keyof T]: T[K] extends string ? K : never

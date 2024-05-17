@@ -1,10 +1,10 @@
 import React, { useContext, ChangeEvent } from 'react'
-import { UADValue } from '../pages/admin/edit-user'
+import { UADValue } from '..'
 import {
   AuthContext,
   SelectedCountryType,
   UserAdminDetails,
-} from '../context/AuthContext'
+} from '../../../../context/AuthContext'
 import { Checkbox, Label } from 'flowbite-react'
 import _ from 'lodash'
 
