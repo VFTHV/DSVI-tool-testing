@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../../../context/AuthContext'
 import { useContext, useEffect } from 'react'
-import customFetch from '../../utils/axios'
-import { getAuthHeaderConfig } from '../../utils/auth'
+import customFetch from '../../../../utils/axios'
+import { getAuthHeaderConfig } from '../../../../utils/auth'
 import { toast } from 'react-toastify'
 
 export const useFetchAndSetUserAdmin = () => {
