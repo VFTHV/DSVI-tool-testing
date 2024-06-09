@@ -1,11 +1,13 @@
 import validator, { StrongPasswordOptions } from 'validator'
 
 export const getAuthHeaderConfig = () => {
-  const token = localStorage.getItem('token')
+  const accessJWT = localStorage.getItem('accessJWT')
+  const refreshJWT = localStorage.getItem('refreshJWT')
 
   return {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${accessJWT}`,
+      'x-refresh-token': refreshJWT,
     },
   }
 }

@@ -40,7 +40,10 @@ export type AuthInitialStateType = {
 
 export type AuthProviderActionType =
   | {
-      type: 'SET_USER_ADMIN_DETAILS' | 'SET_USER'
+      type:
+        | 'SET_USER_ADMIN_DETAILS'
+        | 'SET_USER'
+        | 'SAVE_TOKENS_TO_LOCALSTORAGE'
       payload: any
     }
   | {
@@ -49,6 +52,7 @@ export type AuthProviderActionType =
         | 'CLEAR_IS_LOADING'
         | 'CLEAR_USER'
         | 'CLEAR_USER_ADMIN_DETAILS'
+        | 'CLEAR_TOKENS_IN_LOCAL_STORAGE'
     }
 
 type AuthContextType = {
@@ -92,7 +96,16 @@ export const AuthProvider = ({ children }) => {
       case 'CLEAR_USER': {
         return { ...state, user: null }
       }
-
+      case 'SAVE_TOKENS_TO_LOCALSTORAGE': {
+        const { accessJWT, refreshJWT } = action.payload
+        console.log('payload in reducer: ', action.payload)
+        localStorage.setItem('accessJWT', accessJWT)
+        localStorage.setItem('refreshJWT', refreshJWT)
+      }
+      case 'CLEAR_TOKENS_IN_LOCAL_STORAGE': {
+        localStorage.removeItem('accessJWT')
+        localStorage.removeItem('refreshJWT')
+      }
       default:
         return state
     }

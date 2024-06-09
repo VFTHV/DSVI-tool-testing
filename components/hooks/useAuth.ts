@@ -52,7 +52,14 @@ export const useAuth = () => {
       })
 
       const { user, token } = response.data
-      localStorage.setItem('token', token)
+      console.log('setting localStorage')
+      localStorage.setItem('accessJWT', response.data.tokens.accessJWT)
+      localStorage.setItem('refreshJWT', response.data.tokens.refreshJWT)
+      console.log(response.data.tokens)
+      // dispatch({
+      //   type: 'SAVE_TOKENS_TO_LOCALSTORAGE',
+      //   payload: response.data.tokens,
+      // })
 
       dispatch({ type: 'CLEAR_IS_LOADING' })
       dispatch({ type: 'SET_USER', payload: user })
@@ -74,6 +81,12 @@ export const useAuth = () => {
       .then((response) => {
         dispatch({ type: 'CLEAR_IS_LOADING' })
         dispatch({ type: 'SET_USER', payload: response.data.user })
+        localStorage.setItem('accessJWT', response.data.tokens.accessJWT)
+        localStorage.setItem('refreshJWT', response.data.tokens.refreshJWT)
+        // dispatch({
+        //   type: 'SAVE_TOKENS_TO_LOCALSTORAGE',
+        //   payload: response.data,
+        // })
         return { user: response.data.user }
       })
       .catch((error) => {
@@ -82,6 +95,7 @@ export const useAuth = () => {
 
         dispatch({ type: 'CLEAR_IS_LOADING' })
         dispatch({ type: 'CLEAR_USER' })
+        // dispatch({ type: 'CLEAR_TOKENS_IN_LOCAL_STORAGE' })
         return { error: errMsg }
       })
     return request

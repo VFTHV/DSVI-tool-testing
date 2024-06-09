@@ -53,7 +53,9 @@ Plans:
     * implement backend password validation on front end as well - DONE
     * front-end - admin/edit-user - on refresh the page disappears. Fix probably with
     {id} path param - DONE
-    * refactor admin/edit-user
+    * refactor admin/edit-user creating new components for inputs - DONE
+    * in reducers folder create separate types.ts file and extract types
+    and interfaces into them
     * add checkPermissions on the back end so that one user could not change password
     of another user 
     * on back end when updating password add comparison and validation that old password
