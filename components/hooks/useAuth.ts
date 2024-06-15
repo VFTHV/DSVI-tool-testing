@@ -63,7 +63,7 @@ export const useAuth = () => {
       const errMsg =
         error.response?.data?.msg || error?.message || 'Unknown Error Occurred!'
 
-      localStorage.removeItem('token')
+      clearTokensFromLocalStorage()
       toast.error(errMsg)
       dispatch({ type: 'CLEAR_IS_LOADING' })
       dispatch({ type: 'CLEAR_USER' })
@@ -81,6 +81,11 @@ export const useAuth = () => {
     localStorage.setItem('accessJWT', accessJWT)
     localStorage.setItem('refreshJWT', refreshJWT)
   }
+  const clearTokensFromLocalStorage = () => {
+    console.log('removing from localStorage')
+    localStorage.removeItem('accessJWT')
+    localStorage.removeItem('refreshJWT')
+  }
 
   const checkAuth = () => {
     const request = customFetch
@@ -92,19 +97,16 @@ export const useAuth = () => {
         const { accessJWT, refreshJWT } = response.data.tokens
         saveTokensToLocalStorage({ accessJWT, refreshJWT })
 
-        // dispatch({
-        //   type: 'SAVE_TOKENS_TO_LOCALSTORAGE',
-        //   payload: response.data,
-        // })
         return { user: response.data.user }
       })
       .catch((error) => {
         const errMsg =
           error.response?.data?.msg || error.message || 'Unkown Error Occurred!'
 
+        clearTokensFromLocalStorage()
         dispatch({ type: 'CLEAR_IS_LOADING' })
         dispatch({ type: 'CLEAR_USER' })
-        // dispatch({ type: 'CLEAR_TOKENS_IN_LOCAL_STORAGE' })
+
         return { error: errMsg }
       })
     return request
@@ -152,7 +154,7 @@ export const useAuth = () => {
 
   const logoutUser = () => {
     dispatch({ type: 'CLEAR_USER' })
-    localStorage.removeItem('token')
+    clearTokensFromLocalStorage
   }
 
   const changeUserDetailsAdmin = async (values: UserAdminDetails) => {
