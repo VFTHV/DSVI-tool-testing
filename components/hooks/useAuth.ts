@@ -51,15 +51,10 @@ export const useAuth = () => {
         password,
       })
 
-      const { user, token } = response.data
-      console.log('setting localStorage')
-      localStorage.setItem('accessJWT', response.data.tokens.accessJWT)
-      localStorage.setItem('refreshJWT', response.data.tokens.refreshJWT)
-      console.log(response.data.tokens)
-      // dispatch({
-      //   type: 'SAVE_TOKENS_TO_LOCALSTORAGE',
-      //   payload: response.data.tokens,
-      // })
+      const { user } = response.data
+
+      const { accessJWT, refreshJWT } = response.data.tokens
+      saveTokensToLocalStorage({ accessJWT, refreshJWT })
 
       dispatch({ type: 'CLEAR_IS_LOADING' })
       dispatch({ type: 'SET_USER', payload: user })
@@ -75,14 +70,28 @@ export const useAuth = () => {
     }
   }
 
+  const saveTokensToLocalStorage = ({
+    accessJWT,
+    refreshJWT,
+  }: {
+    accessJWT: string
+    refreshJWT: string
+  }) => {
+    console.log('saving to localStorage')
+    localStorage.setItem('accessJWT', accessJWT)
+    localStorage.setItem('refreshJWT', refreshJWT)
+  }
+
   const checkAuth = () => {
     const request = customFetch
       .get('/api/v1/auth/routing', getAuthHeaderConfig())
       .then((response) => {
         dispatch({ type: 'CLEAR_IS_LOADING' })
         dispatch({ type: 'SET_USER', payload: response.data.user })
-        localStorage.setItem('accessJWT', response.data.tokens.accessJWT)
-        localStorage.setItem('refreshJWT', response.data.tokens.refreshJWT)
+
+        const { accessJWT, refreshJWT } = response.data.tokens
+        saveTokensToLocalStorage({ accessJWT, refreshJWT })
+
         // dispatch({
         //   type: 'SAVE_TOKENS_TO_LOCALSTORAGE',
         //   payload: response.data,

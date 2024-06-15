@@ -96,12 +96,7 @@ export const AuthProvider = ({ children }) => {
       case 'CLEAR_USER': {
         return { ...state, user: null }
       }
-      case 'SAVE_TOKENS_TO_LOCALSTORAGE': {
-        const { accessJWT, refreshJWT } = action.payload
-        console.log('payload in reducer: ', action.payload)
-        localStorage.setItem('accessJWT', accessJWT)
-        localStorage.setItem('refreshJWT', refreshJWT)
-      }
+
       case 'CLEAR_TOKENS_IN_LOCAL_STORAGE': {
         localStorage.removeItem('accessJWT')
         localStorage.removeItem('refreshJWT')
