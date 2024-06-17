@@ -21,7 +21,7 @@ export default function UserList({ users }: UserListPropsType) {
     })
   }
 
-  if (!users.length) return <></>
+  if (!users || !users.length) return <></>
   return (
     <div className="m-2 overflow-x-auto">
       <Table>
