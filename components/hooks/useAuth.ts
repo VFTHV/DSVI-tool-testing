@@ -77,7 +77,6 @@ export const useAuth = () => {
     accessJWT: string
     refreshJWT: string
   }) => {
-    console.log('saving to localStorage')
     localStorage.setItem('accessJWT', accessJWT)
     localStorage.setItem('refreshJWT', refreshJWT)
   }
@@ -152,9 +151,16 @@ export const useAuth = () => {
     }, [router.route])
   }
 
-  const logoutUser = () => {
+  const logoutUser = async () => {
+    const response = await customFetch.delete(
+      '/api/v1/auth/logout',
+      getAuthHeaderConfig()
+    )
+
     dispatch({ type: 'CLEAR_USER' })
-    clearTokensFromLocalStorage
+    clearTokensFromLocalStorage()
+
+    toast.success(response.data?.msg || 'Logout Successful')
   }
 
   const changeUserDetailsAdmin = async (values: UserAdminDetails) => {
