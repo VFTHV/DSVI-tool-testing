@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import {
   AuthContext,
@@ -8,95 +8,104 @@ import {
 import customFetch from '../../utils/axios'
 import { toast } from 'react-toastify'
 import { RoleType, SelectedCountryType } from '../../context/AuthContext'
+import { checkPasswordStrength, getAuthHeaderConfig } from '../../utils/auth'
 
 export const useAuth = () => {
   const { state, dispatch } = useContext(AuthContext)
   const router = useRouter()
 
-  const registerUser = (
+  const registerUser = async (
     name: string,
     email: string,
     password: string,
     countries: SelectedCountryType[],
     role: RoleType
   ) => {
-    const asyncRegister = async (
-      name: string,
-      email: string,
-      password: string,
-      countries: SelectedCountryType[],
-      role: RoleType
-    ) => {
-      try {
-        dispatch({ type: 'AUTHENTICATION_PENDING' })
+    dispatch({ type: 'SET_IS_LOADING' })
 
-        // user register post request
-        const response = await customFetch.post('api/v1/auth/register', {
-          name,
-          email,
-          password,
-          countries,
-          role,
-        })
+    const response = await customFetch.post(
+      '/api/v1/auth/register',
+      {
+        name,
+        email,
+        password,
+        countries,
+        role,
+      },
+      getAuthHeaderConfig()
+    )
 
-        dispatch({ type: 'REGISTER_USER_FULFILLED' })
-        toast.success(
-          `Account created. Verification email sent. Verify email, then login`,
-          { autoClose: false }
-        )
-      } catch (error) {
-        toast.error(error.response.data.msg)
-        dispatch({ type: 'REGISTER_USER_REJECTED', payload: error })
-      }
-    }
-    asyncRegister(name, email, password, countries, role)
+    dispatch({ type: 'CLEAR_IS_LOADING' })
+    toast.success(
+      `Account created. Verification email sent. Verify email, then login`,
+      { autoClose: false }
+    )
   }
 
-  const loginUser = (email: string, password: string) => {
-    const asyncLogin = async (email: string, password: string) => {
-      try {
-        dispatch({ type: 'AUTHENTICATION_PENDING' })
+  const loginUser = async (email: string, password: string) => {
+    try {
+      dispatch({ type: 'SET_IS_LOADING' })
 
-        // user login post request
-        const response = await customFetch.post('api/v1/auth/login', {
-          email,
-          password,
-        })
+      const response = await customFetch.post('/api/v1/auth/login', {
+        email,
+        password,
+      })
 
-        const { user } = response.data
-        console.log('loginUser, user: ', user)
+      const { user } = response.data
 
-        dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: user })
-        toast.success(`Welcome back ${user.name}`)
-      } catch (error) {
-        const errMsg = error.response.data
-          ? error.response.data.msg
-          : error.message
+      const { accessJWT, refreshJWT } = response.data.tokens
+      saveTokensToLocalStorage({ accessJWT, refreshJWT })
 
-        toast.error(errMsg)
-        dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: error })
-      }
+      dispatch({ type: 'CLEAR_IS_LOADING' })
+      dispatch({ type: 'SET_USER', payload: user })
+      toast.success(`Welcome back ${user.name}`)
+    } catch (error) {
+      const errMsg =
+        error.response?.data?.msg || error?.message || 'Unknown Error Occurred!'
+
+      clearTokensFromLocalStorage()
+      toast.error(errMsg)
+      dispatch({ type: 'CLEAR_IS_LOADING' })
+      dispatch({ type: 'CLEAR_USER' })
     }
-    asyncLogin(email, password)
+  }
+
+  const saveTokensToLocalStorage = ({
+    accessJWT,
+    refreshJWT,
+  }: {
+    accessJWT: string
+    refreshJWT: string
+  }) => {
+    localStorage.setItem('accessJWT', accessJWT)
+    localStorage.setItem('refreshJWT', refreshJWT)
+  }
+  const clearTokensFromLocalStorage = () => {
+    console.log('removing from localStorage')
+    localStorage.removeItem('accessJWT')
+    localStorage.removeItem('refreshJWT')
   }
 
   const checkAuth = () => {
-    console.log('cookie: ', document.cookie)
     const request = customFetch
-      .get('api/v1/auth/routing')
+      .get('/api/v1/auth/routing', getAuthHeaderConfig())
       .then((response) => {
-        dispatch({
-          type: 'AUTHENTICATE_USER_FULFILLED',
-          payload: response.data.user,
-        })
+        dispatch({ type: 'CLEAR_IS_LOADING' })
+        dispatch({ type: 'SET_USER', payload: response.data.user })
+
+        const { accessJWT, refreshJWT } = response.data.tokens
+        saveTokensToLocalStorage({ accessJWT, refreshJWT })
+
         return { user: response.data.user }
       })
       .catch((error) => {
-        const errMsg = error.response.data
-          ? error.response.data.msg
-          : error.message
+        const errMsg =
+          error.response?.data?.msg || error.message || 'Unkown Error Occurred!'
 
-        dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: errMsg })
+        clearTokensFromLocalStorage()
+        dispatch({ type: 'CLEAR_IS_LOADING' })
+        dispatch({ type: 'CLEAR_USER' })
+
         return { error: errMsg }
       })
     return request
@@ -142,114 +151,86 @@ export const useAuth = () => {
     }, [router.route])
   }
 
-  const logoutUser = () => {
-    const asyncLogout = async () => {
-      dispatch({ type: 'AUTHENTICATION_PENDING' })
+  const logoutUser = async () => {
+    const response = await customFetch.delete(
+      '/api/v1/auth/logout',
+      getAuthHeaderConfig()
+    )
 
-      // for DEV only
-      // const pause = (duration) => {
-      //   return new Promise((resolve) => {
-      //     setTimeout(resolve, duration)
-      //   })
-      // }
-      // await pause(2000)
+    dispatch({ type: 'CLEAR_USER' })
+    clearTokensFromLocalStorage()
 
-      try {
-        const response = await customFetch.get('api/v1/auth/logout')
-        dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: null })
-        const { msg } = response.data
-        toast.success(msg)
-      } catch (error) {
-        toast.error(error.message)
-      }
-    }
-    asyncLogout()
+    toast.success(response.data?.msg || 'Logout Successful')
   }
 
-  const changeUserDetailsAdmin = (values: UserAdminDetails) => {
+  const changeUserDetailsAdmin = async (values: UserAdminDetails) => {
     dispatch({ type: 'SET_IS_LOADING' })
 
-    customFetch
-      .post('api/v1/user/update-user-admin', values)
-      .then((response) => {
-        // dispatch set admin user with response.data.user?
-        toast.success(response.data.msg)
-        router.push('/admin')
-        dispatch({ type: 'CLEAR_USER_ADMIN_DETAILS', payload: values })
-        dispatch({ type: 'CLEAR_IS_LOADING' })
-      })
-      .catch((error) => {
-        const errMsg = error.response.data
-          ? error.response.data.msg
-          : error.message
-        toast.error(errMsg)
-        dispatch({ type: 'CLEAR_IS_LOADING' })
-      })
+    try {
+      checkPasswordStrength(values.password)
+      const response = await customFetch.post(
+        '/api/v1/user/update-user-admin',
+        values,
+        getAuthHeaderConfig()
+      )
+
+      toast.success(response.data.msg)
+
+      dispatch({ type: 'SET_USER_ADMIN_DETAILS', payload: response.data.user })
+      dispatch({ type: 'CLEAR_IS_LOADING' })
+    } catch (error) {
+      const errMsg =
+        error.response?.data?.msg || error.message || 'Unkown Error Occurred!'
+
+      toast.error(errMsg)
+      dispatch({ type: 'CLEAR_IS_LOADING' })
+    }
   }
 
   const deleteUserAccount = (userId: string) => {
     customFetch
-      .delete('api/v1/user/delete-user', {
-        data: { _id: userId },
-      })
+      .delete(`/api/v1/user/delete-user?id=${userId}`, getAuthHeaderConfig())
       .then((response) => {
         toast.success('User Deleted Successfully')
         router.push('/admin')
       })
       .catch((error) => {
-        const errMsg = error.response.data
-          ? error.response.data.msg
-          : error.message
+        const errMsg =
+          error.response?.data?.msg || error.message || 'Unkown Error Occurred!'
         toast.error(errMsg)
       })
   }
 
   const changePasswordUser = async (passwordValues: {
-    oldPassword: String
-    newPassword: String
-    confirmPassword: String
+    oldPassword: string
+    newPassword: string
+    confirmPassword: string
   }) => {
-    const { newPassword, confirmPassword, oldPassword } = passwordValues
-
-    if (newPassword !== confirmPassword) {
-      toast.error('New passwords are not matching')
-      return
-    }
-    if (oldPassword === newPassword) {
-      toast.error('Cannot use previous password')
-      return
-    }
+    const { newPassword, confirmPassword } = passwordValues
 
     dispatch({ type: 'SET_IS_LOADING' })
 
     try {
+      if (newPassword !== confirmPassword) {
+        throw new Error('New passwords are not matching')
+      }
+
+      checkPasswordStrength(newPassword)
       const response = await customFetch.patch(
-        'api/v1/user/update-user-password',
-        passwordValues
+        '/api/v1/user/update-user-password',
+        passwordValues,
+        getAuthHeaderConfig()
       )
 
       toast.success(response.data.msg)
       dispatch({ type: 'CLEAR_IS_LOADING' })
     } catch (error) {
-      const errMsg = error.response.data
-        ? error.response.data.msg
-        : error.message
+      const errMsg =
+        error.response?.data?.msg || error.message || 'Unkown Error Occurred!'
+
       toast.error(errMsg)
       dispatch({ type: 'CLEAR_IS_LOADING' })
     }
-    // customFetch
-    //   .patch('api/v1/user/update-user-password', passwordValues)
-    //   .then((response) => {
-    //     toast.success(response.data.msg)
-    //     dispatch({ type: 'CLEAR_IS_LOADING' })
-    //   })
-    //   .catch((error) => {
-    //     const errMsg = error.response.data
-    //       ? error.response.data.msg
-    //       : error.message
-    //     toast.error(errMsg)
-    //     dispatch({ type: 'CLEAR_IS_LOADING' })
-    //   })
   }
 
   return {

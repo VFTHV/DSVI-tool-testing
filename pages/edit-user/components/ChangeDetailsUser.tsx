@@ -1,8 +1,9 @@
 import React, { FormEvent, useContext, useState } from 'react'
 import { Button, TextInput, Label } from 'flowbite-react'
-import { AuthContext } from '../context/AuthContext'
-import customFetch from '../utils/axios'
+import { AuthContext } from '../../../context/AuthContext'
+import customFetch from '../../../utils/axios'
 import { toast } from 'react-toastify'
+import { getAuthHeaderConfig } from '../../../utils/auth'
 
 export default function ChangeDetailsUser() {
   const { state, dispatch } = useContext(AuthContext)
@@ -31,16 +32,15 @@ export default function ChangeDetailsUser() {
     dispatch({ type: 'SET_IS_LOADING' })
 
     customFetch
-      .patch('api/v1/user/update-user', { name, email })
+      .patch('api/v1/user/update-user', { name, email }, getAuthHeaderConfig())
       .then((response) => {
         toast.success(response.data.msg)
         dispatch({ type: 'SET_USER', payload: response.data.user })
         dispatch({ type: 'CLEAR_IS_LOADING' })
       })
       .catch((error) => {
-        const errMsg = error.response.data
-          ? error.response.data.msg
-          : error.message
+        const errMsg =
+          error.response?.data?.msg || error.message || 'Unkown Error Occurred!'
         toast.error(errMsg)
         dispatch({ type: 'CLEAR_IS_LOADING' })
       })

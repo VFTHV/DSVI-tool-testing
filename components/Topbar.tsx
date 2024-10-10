@@ -30,7 +30,7 @@ const TopBar = () => {
           <li className="flex items-center justify-end">
             <a className="flex items-center">
               <img
-                src="images/logo-sdg-ai-lab-black-alpha.png"
+                src="/images/logo-sdg-ai-lab-black-alpha.png"
                 width={85}
                 height={70}
                 alt="circular"

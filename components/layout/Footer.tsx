@@ -16,7 +16,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               target="_blank"
             >
-              © 2024 — @SDG AI LAB
+              © {new Date().getFullYear()} — @SDG AI LAB
             </a>
             <a
               className="ml-3 text-gray-500"

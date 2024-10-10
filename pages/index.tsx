@@ -11,6 +11,8 @@ const LeafletMap = dynamic(() => import('../components/leaflet/Map'), {
 
 const Application = () => {
   const { state } = useContext(AuthContext)
+  // const { protectedRoute } = useAuth()
+  // protectedRoute()
 
   // if (!state.user) return <></>
   return (

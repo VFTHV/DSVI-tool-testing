@@ -23,7 +23,9 @@ export default function VerifyEmail() {
         })
       }
     } catch (error) {
-      setErrorText(error.response.data.msg)
+      const errMsg =
+        error.response?.data?.msg || error.message || 'Unkown Error Occurred!'
+      setErrorText(errMsg)
     }
     setLoading(false)
   }

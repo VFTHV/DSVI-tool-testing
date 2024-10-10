@@ -4,7 +4,8 @@ import { Button, TextInput, Label } from 'flowbite-react'
 import { AuthContext, UserAdminDetails } from '../../context/AuthContext'
 import customFetch from '../../utils/axios'
 import { toast } from 'react-toastify'
-import UserList from '../../components/UserList'
+import UserList from './components/UserList'
+import { getAuthHeaderConfig } from '../../utils/auth'
 
 export default function Admin() {
   const { state } = useContext(AuthContext)
@@ -12,46 +13,23 @@ export default function Admin() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [searchTerm, setSearchTerm] = useState<string>('')
 
-  const getAllUsers = async () => {
+  const getUsers = async (searchWord: string | null) => {
     try {
       setIsLoading(true)
-      const response = await customFetch.get('api/v1/user/get-all-users')
+
+      searchWord = searchWord ? searchWord : ''
+      const response = await customFetch.get('api/v1/user/', {
+        params: {
+          email: searchWord ? searchWord : null,
+        },
+        ...getAuthHeaderConfig(),
+      })
 
       setUsers(response.data.users)
       setIsLoading(false)
     } catch (error) {
-      const errMsg = error.response.data
-        ? error.response.data.msg
-        : error.message
-
-      toast.error(errMsg)
-      setIsLoading(false)
-    }
-  }
-
-  const getSingleUser = async () => {
-    try {
-      setIsLoading(true)
-      const response = await customFetch.get('api/v1/user', {
-        params: {
-          email: searchTerm,
-        },
-      })
-      // DEV only
-      // const pause = (delay) => {
-      //   return new Promise((res) => {
-      //     setTimeout(res, delay)
-      //   })
-      // }
-      // await pause(2000)
-
-      setUsers([response.data.user])
-      setSearchTerm('')
-      setIsLoading(false)
-    } catch (error) {
-      const errMsg = error.response.data
-        ? error.response.data.msg
-        : error.message
+      const errMsg =
+        error.response?.data?.msg || error.message || 'Error. Try again later!'
 
       toast.error(errMsg)
       setIsLoading(false)
@@ -71,7 +49,7 @@ export default function Admin() {
       <Button
         className="m-2"
         color="blue"
-        onClick={getAllUsers}
+        onClick={() => getUsers(null)}
         disabled={isLoading}
       >
         {isLoading ? 'loading...' : 'Get All Users'}
@@ -87,7 +65,7 @@ export default function Admin() {
       </Button>
       <div className="flex items-center">
         <Label className="m-2 " htmlFor="find">
-          Find One User by Email
+          Find Users by Email
         </Label>
 
         <TextInput
@@ -98,7 +76,7 @@ export default function Admin() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <Button
-          onClick={getSingleUser}
+          onClick={() => getUsers(searchTerm)}
           className="m-2"
           color="blue"
           disabled={isLoading}

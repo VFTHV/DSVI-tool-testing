@@ -42,14 +42,36 @@ Plans:
     * add confirm email functionality: admin confirms the email. But user gets email notification
         - install nodemailer and create sendEmail controller - DONE
         - refactor login and register controllers as 11-auth-workflow - DONE
-    * add forgot password functionality
+    * figure out why there are 2 requests sent when routing - DONE
+    * make backend be case insensitive to email - DONE
+    * when making changes to user from admin page, current displayed user settings do not match
+    the ones in database - DONE
+    * when changing name in admin edit user then email becomes red too - FIXED DONE
+    * create different password rules: at least 8 chars, include one number, one lower, one upper case, one special character, no spaces in password - DONE FOR backend
+    * user model to contain array of authorized countries - DONE
+    * create PasswordChecker component that visually represents if password is correct - DONE
+    * implement backend password validation on front end as well - DONE
+    * front-end - admin/edit-user - on refresh the page disappears. Fix probably with
+    {id} path param - DONE
+    * refactor admin/edit-user creating new components for inputs - DONE
+    * in reducers folder create separate types.ts file and extract types
+    and interfaces into them
+    * add checkPermissions on the back end so that one user could not change password
+    of another user 
+    * on back end when updating password add comparison and validation that old password
+    cannot be the same as new
+    * add forgot password functionality 
+    * password not to be same as 5 previous passwords
     that their account is waiting for admin's confirmation
     * add re-send verification email functionality 
     * add checkForUnauthorizedResponse in axios localStorage logic
-    * user model to contain array of authorized countries
+    * add encryption of stored data
+    * add decryption (non automatic) of stored data
     * add authenticateUser middleware on backend. Functionality:
         check if user's countries authorization array contains(country) --> next()
     * front end: create api functionality to request layers
+    * re-organize files in /pages according to nextjs best practices
+    * change names of some components: ask ChatGPT for advice
 
     
 
