@@ -14,7 +14,7 @@ const Application = () => {
   // const { protectedRoute } = useAuth()
   // protectedRoute()
 
-  if (!state.user) return <></>
+  // if (!state.user) return <></>
   return (
     <div className="flex">
       <Sidebar show={true} originalInitialState={reducerInitialState} />
